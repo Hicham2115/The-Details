@@ -201,7 +201,7 @@ export function Contact() {
           <a
             key={text}
             href={i === 0 ? "mailto:thedetailss.018@gmail.com" : "#whatsapp"}
-            className="break-all text-[clamp(22px,3.4vw,44px)] leading-[1.05] font-bold tracking-[-0.02em] transition-colors hover:text-accent phone:min-h-11 phone:text-[30px]"
+            className="break-all text-[clamp(22px,3.4vw,44px)] leading-[1.05] font-bold tracking-[-0.02em] transition-colors hover:text-accent phone:min-h-11 phone:text-[clamp(15px,5.2vw,22px)]"
           >
             {text}
           </a>
