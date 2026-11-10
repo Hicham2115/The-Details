@@ -1,26 +1,169 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@custom-variant tablet (@media (max-width: 900px));
+@custom-variant phone (@media (max-width: 600px));
+
+/* Dark is the only theme. All colours live here as tokens. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  --background: #121111;
+  --surface: #1c1a19;
+  --deep: #0d0c0c;
+  --footer: #0b0a0a;
+  --foreground: #f1ede6;
+  --muted-foreground: #b5aea5;
+  --faint: #8b857c;
+  --border: #3a3633;
+  --accent: #e58a98;
+  --chrome: #b8bcc3;
+  --tag-new: #3b3454;
+  --tag-sale: #3a1a20;
+  --tag-preorder: #4a2733;
+
+  /* shadcn semantic aliases */
+  --card: var(--surface);
+  --card-foreground: var(--foreground);
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+  --primary: var(--foreground);
+  --primary-foreground: var(--background);
+  --secondary: var(--surface);
+  --secondary-foreground: var(--foreground);
+  --muted: var(--surface);
+  --accent-foreground: var(--background);
+  --destructive: var(--accent);
+  --input: var(--border);
+  --ring: var(--foreground);
+  --radius: 0.75rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-deep: var(--deep);
+  --color-footer: var(--footer);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-chrome: var(--chrome);
+  --color-tag-new: var(--tag-new);
+  --color-tag-sale: var(--tag-sale);
+  --color-tag-preorder: var(--tag-preorder);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-destructive: var(--destructive);
+
+  --font-display: var(--font-bebas), "Oswald", Impact, sans-serif;
+  --font-serif: var(--font-gloock), "Bodoni Moda", Georgia, serif;
+  --font-sans: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
+  --font-logo: var(--font-unifraktur), var(--font-gloock), Georgia, serif;
+
+  --default-transition-duration: 400ms;
+  --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --radius-tag: 6px;
+  --radius-card: 12px;
+  --radius-pill: 999px;
+
+  --shadow-glow: 0 16px 40px rgb(0 0 0 / 0.5), 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent);
+  --shadow-lift: 0 8px 24px rgb(0 0 0 / 0.35);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  /* Scrollbar: webkit rules for Chrome/Safari, scrollbar-color only for Firefox
+     (setting scrollbar-color in Chrome would disable the webkit styling). */
+  @supports not selector(::-webkit-scrollbar) {
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) var(--surface);
+    }
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--surface);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--faint);
+    border-radius: 999px;
+    border: 3px solid var(--surface);
+    transition: background 0.4s;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+  }
+  /* Smooth hover transitions everywhere */
+  a,
+  button,
+  input,
+  textarea,
+  summary {
+    transition-property: color, background-color, border-color, box-shadow, transform, scale, translate, rotate, opacity;
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  a:active,
+  button:active {
+    transform: scale(0.98);
+  }
+  img {
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), scale 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: scale;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid var(--foreground);
+    outline-offset: 2px;
+  }
+  [id] {
+    scroll-margin-top: 16px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+  }
 }
