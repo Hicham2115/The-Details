@@ -1,61 +1,105 @@
 export const navLinks = [
   { label: "New", href: "#new" },
-  { label: "About us", href: "#about" },
-  { label: "Delivery", href: "#delivery" },
+  { label: "About us", href: "#lookbook" },
+  { label: "Delivery", href: "#faq" },
   { label: "Collections", href: "#collections" },
   { label: "Contact", href: "#contact" },
 ];
 
+export type ProductCategory = "Belts" | "Rings" | "Cases";
+
 export type Product = {
+  category: ProductCategory;
   name: string;
   variant: string;
   price: number;
   oldPrice?: number;
   tag?: "New" | "Sale" | "Pre-order";
-  image: string;
+  /** First image is the main one; the second shows on hover. */
+  images: string[];
   alt: string;
 };
 
+// "-0" is the hand-picked main photo (first image.png). Rings has none, so it starts at "-1".
+const img = (slug: string, count: number, hasMain = true) =>
+  Array.from({ length: count + (hasMain ? 1 : 0) }, (_, i) => `/images/products/${slug}-${i + (hasMain ? 0 : 1)}.webp`);
+
+// NOTE: prices marked "TODO price" are provisional. Confirm them before launch.
 export const products: Product[] = [
   {
     name: "Love Hurts Belt",
+    category: "Belts",
     variant: "Burgundy / Silver buckle",
     price: 89,
     tag: "New",
-    image: "/images/product-love-hurts-belt.jpg",
-    alt: "Burgundy embossed belt with a heart and dagger buckle reading Love Hurts",
+    images: img("love-hurts-belt", 6),
+    alt: "Burgundy embossed belt with a silver heart and dagger buckle reading Love Hurts",
   },
   {
     name: "Snake Buckle Belt — Violet",
+    category: "Belts",
     variant: "Violet / Silver buckle",
     price: 69,
     oldPrice: 89,
     tag: "Sale",
-    image: "/images/product-snake-buckle-belt-violet.jpg",
-    alt: "Violet scaled belt with a silver snake buckle",
+    images: img("snake-buckle-belt-violet", 5),
+    alt: "Violet snakeskin-print belt with a silver coiled snake buckle",
   },
   {
     name: "Headline Case — Silver",
+    category: "Cases",
     variant: "Metal / Printed cover",
     price: 59,
-    image: "/images/product-headline-case-silver.jpg",
-    alt: "Silver metal cigarette case with a printed newspaper headline cover",
+    images: img("headline-case-silver", 4),
+    alt: "Silver metal cigarette case with a vintage newspaper headline cover",
   },
   {
-    name: "Star Ring Set",
-    variant: "Silver / Set of 4",
-    price: 49,
-    tag: "Pre-order",
-    image: "/images/product-star-ring-set.jpg",
-    alt: "Hand wearing four silver rings, including a star ring, and a chain bracelet",
+    name: "Gothic Rings Set",
+    category: "Rings",
+    variant: "Silver / Set of 12",
+    price: 49, // TODO price
+    images: img("gothic-rings-set", 4, false),
+    alt: "Set of twelve silver gothic rings with skulls, stars and black stones",
+  },
+  {
+    name: "Bull Head Western Belt",
+    category: "Belts",
+    variant: "Brown / Antique brass buckle",
+    price: 79, // TODO price
+    images: img("bull-head-western-belt", 5),
+    alt: "Brown embossed leather belt with an antique brass bull head buckle",
+  },
+  {
+    name: "Grim Reaper Belt",
+    category: "Belts",
+    variant: "Red / Antique silver buckle",
+    price: 89, // TODO price
+    images: img("grim-reaper-belt", 4),
+    alt: "Red embossed belt with an antique silver Grim Reaper skull buckle",
+  },
+  {
+    name: "Leopard Plush Belt",
+    category: "Belts",
+    variant: "Pink / Silver double buckle",
+    price: 59, // TODO price
+    images: img("leopard-plush-belt", 2),
+    alt: "Pink leopard-print plush double row belt with a silver buckle",
+  },
+  {
+    name: "Starry Night Case",
+    category: "Cases",
+    variant: "Metal / Printed cover",
+    price: 59, // TODO price
+    images: img("starry-night-case", 4),
+    alt: "Silver metal cigarette case printed with a swirling starry night painting",
   },
 ];
 
 export const categories = [
-  { name: "Belts & Buckles", href: "#belts", image: "/images/category-belts-buckles.jpg", size: "big", position: "tablet:object-[50%_21.7%]" },
-  { name: "Rings", href: "#rings", image: "/images/product-star-ring-set.jpg", size: "small", position: "object-[50%_40%]" },
-  { name: "Cases", href: "#cases", image: "/images/product-headline-case-silver.jpg", size: "small", position: "object-[50%_30%]" },
-  { name: "Chains & Pendants", href: "#chains", image: "/images/category-chains-pendants.jpg", size: "wide", position: "" },
+  { name: "Belts & Buckles", href: "/products?category=Belts", image: "/images/category-belts-buckles.jpg", size: "big", position: "tablet:object-[50%_21.7%]" },
+  { name: "Rings", href: "/products?category=Rings", image: "/images/product-star-ring-set.jpg", size: "small", position: "object-[50%_40%]" },
+  { name: "Cases", href: "/products?category=Cases", image: "/images/product-headline-case-silver.jpg", size: "small", position: "object-[50%_30%]" },
+  { name: "Chains & Pendants", href: "/products", image: "/images/category-chains-pendants.jpg", size: "wide", position: "" },
 ] as const;
 
 export const hotspots = [
@@ -70,8 +114,8 @@ export const faqs = [
 ];
 
 export const footerColumns = [
-  { title: "Shop", links: [["Belts & Buckles", "#belts"], ["Rings", "#rings"], ["Cases", "#cases"], ["Chains & Pendants", "#chains"]] },
-  { title: "Help", links: [["Delivery", "#delivery"], ["FAQ", "#faq"], ["Contact", "#contact"], ["About us", "#about"]] },
+  { title: "Shop", links: [["Belts & Buckles", "/products?category=Belts"], ["Rings", "/products?category=Rings"], ["Cases", "/products?category=Cases"], ["Chains & Pendants", "/products"]] },
+  { title: "Help", links: [["Delivery", "#faq"], ["FAQ", "#faq"], ["Contact", "#contact"], ["About us", "#lookbook"]] },
   { title: "Social", links: [["Instagram", "#instagram"], ["TikTok", "#tiktok"], ["WhatsApp", "#whatsapp"]] },
 ] as const;
 

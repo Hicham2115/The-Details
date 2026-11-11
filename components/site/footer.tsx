@@ -78,7 +78,7 @@ function Newsletter() {
   );
 }
 
-export function Footer() {
+export function Footer({ base = "" }: { base?: string }) {
   return (
     <footer className="mt-16 overflow-hidden border-t border-border bg-footer">
       <div className="w-full px-8 pt-[72px] phone:px-4 phone:pt-12">
@@ -106,7 +106,7 @@ export function Footer() {
               {col.links.map(([label, href]) => (
                 <a
                   key={label}
-                  href={href}
+                  href={href.startsWith("#") ? `${base}${href}` : href}
                   className="flex min-h-11 items-center text-sm text-foreground/70 transition-all hover:translate-x-1 hover:text-foreground"
                 >
                   <span className="link-underline">{label}</span>
@@ -127,7 +127,7 @@ export function Footer() {
             ].map(([label, href]) => (
               <a
                 key={label}
-                href={href}
+                href={href.startsWith("#") ? `${base}${href}` : href}
                 className="inline-flex min-h-11 items-center text-[13px] text-foreground/70 transition-all hover:translate-x-1 hover:text-foreground"
               >
                 <span className="link-underline">{label}</span>
@@ -137,10 +137,6 @@ export function Footer() {
         </div>
 
         <div className="relative mt-2 text-center">
-          <Sparkle
-            size={26}
-            className="absolute top-[12%] right-[3%] text-chrome"
-          />
           <p
             aria-hidden="true"
             className="m-0 -mb-[0.16em] bg-linear-to-b from-chrome/95 to-chrome/5 to-[82%] bg-clip-text font-logo text-[clamp(72px,16vw,230px)] leading-none font-bold whitespace-nowrap text-transparent phone:text-[17vw]"

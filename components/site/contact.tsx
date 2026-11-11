@@ -10,6 +10,7 @@ import { useContact } from "@/hooks/use-contact";
 import { getErrorMessage } from "@/lib/errors";
 import { contactSchema, TOPICS } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
+import { CustomSelect } from "./custom-select";
 
 type Values = { firstName: string; lastName: string; topic: (typeof TOPICS)[number]; email: string; newsletter: boolean; message: string };
 type Errors = Partial<Record<keyof Values, string>>;
@@ -126,16 +127,12 @@ export function Contact() {
 
           <div className="flex flex-col">
             <label htmlFor="c-topic" className={labelCls}>Topic</label>
-            <select
+            <CustomSelect
               id="c-topic"
               value={values.topic}
-              onChange={(e) => set("topic", e.target.value as Values["topic"])}
-              className={cn(fieldBase, "cursor-pointer")}
-            >
-              {TOPICS.map((t) => (
-                <option key={t} value={t} className="bg-background">{t}</option>
-              ))}
-            </select>
+              onChange={(v) => set("topic", v)}
+              options={TOPICS.map((t) => ({ value: t, label: t }))}
+            />
           </div>
 
           <div className="flex flex-col">

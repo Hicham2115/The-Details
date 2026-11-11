@@ -16,7 +16,6 @@ export function SectionTitle({
         {children}
       </h2>
       <Sparkle size={22} className="mt-0.5 text-foreground tablet:hidden" />
-      <Sparkle size={12} className="mt-[26px] text-chrome tablet:hidden" />
     </div>
   );
 }

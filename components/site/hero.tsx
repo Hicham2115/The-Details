@@ -42,10 +42,6 @@ export function Hero() {
           d="M12 0C12.8 7 17 11.2 24 12C17 12.8 12.8 17 12 24C11.2 17 7 12.8 0 12C7 11.2 11.2 7 12 0Z"
         />
       </svg>
-      <Sparkle
-        size={26}
-        className="absolute top-3.5 right-4 z-3 text-foreground tablet:hidden"
-      />
 
       <h1
         id="hero-title"
@@ -61,7 +57,7 @@ export function Hero() {
             Get 30% discount on your first order
           </p>
           <a
-            href="#collections"
+            href="/products"
             className={cn(
               buttonVariants({ variant: "solid", size: "pill" }),
               "tablet:h-12 tablet:w-full",

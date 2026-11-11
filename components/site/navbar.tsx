@@ -26,11 +26,11 @@ const iconBtn =
   "inline-flex size-11 items-center justify-center rounded-pill border border-border text-foreground transition-colors hover:border-foreground hover:bg-surface";
 const label = "text-xs leading-4 font-semibold tracking-[0.08em] uppercase";
 
-export function Navbar() {
+export function Navbar({ base = "" }: { base?: string }) {
   return (
     <header className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-4 py-5 phone:gap-2 phone:py-3">
       <Link
-        href="#top"
+        href={`${base}#top`}
         aria-label="The Details — home"
         className="col-start-2 row-start-1 inline-flex items-center justify-self-center"
       >
@@ -86,7 +86,7 @@ export function Navbar() {
                 <SheetClose
                   key={l.href}
                   nativeButton={false}
-                  render={<a href={l.href} />}
+                  render={<a href={`${base}${l.href}`} />}
                   className="flex min-h-14 items-center justify-between border-b border-border px-1 font-display text-[34px] leading-none tracking-[0.01em] uppercase transition-colors hover:text-accent"
                 >
                   <span>{l.label}</span>
@@ -98,7 +98,7 @@ export function Navbar() {
             <div className="mt-auto flex flex-col gap-3 pt-6">
               <SheetClose
                 nativeButton={false}
-                render={<a href="#collections" />}
+                render={<a href={`${base}#collections`} />}
                 className="inline-flex h-12 items-center justify-center rounded-pill bg-foreground px-6 text-xs leading-4 font-semibold tracking-[0.08em] text-background uppercase transition-colors hover:bg-accent"
               >
                 Shop now
@@ -107,7 +107,7 @@ export function Navbar() {
                 {["Instagram", "TikTok", "WhatsApp"].map((s) => (
                   <a
                     key={s}
-                    href={`#${s.toLowerCase()}`}
+                    href={`${base}#${s.toLowerCase()}`}
                     className="inline-flex min-h-11 items-center hover:text-accent"
                   >
                     {s}
@@ -127,7 +127,7 @@ export function Navbar() {
         {navLinks.map((l, i) => (
           <a
             key={l.href}
-            href={l.href}
+            href={`${base}${l.href}`}
             aria-current={i === 0 ? "page" : undefined}
             className={cn(
               label,
@@ -153,11 +153,11 @@ export function Navbar() {
             className="h-auto flex-1 border-0 bg-transparent p-0 text-[13px] shadow-none focus-visible:ring-0 dark:bg-transparent"
           />
         </label>
-        <a href="#wishlist" aria-label="Wishlist" className={iconBtn}>
+        <a href={`${base}#wishlist`} aria-label="Wishlist" className={iconBtn}>
           <Heart className="size-5" strokeWidth={1.5} />
         </a>
         <a
-          href="#cart"
+          href={`${base}#cart`}
           aria-label="Cart, 0 items"
           className={cn(
             iconBtn,
