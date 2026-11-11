@@ -21,12 +21,17 @@ import {
 } from "@/components/ui/sheet";
 import { navLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { cartCount, useCart } from "@/stores/cart-store";
+import { useFavorites } from "@/stores/favorites-store";
 
 const iconBtn =
   "inline-flex size-11 items-center justify-center rounded-pill border border-border text-foreground transition-colors hover:border-foreground hover:bg-surface";
 const label = "text-xs leading-4 font-semibold tracking-[0.08em] uppercase";
 
 export function Navbar({ base = "" }: { base?: string }) {
+  const count = useCart((s) => cartCount(s.lines));
+  const openCart = useCart((s) => s.open);
+  const favCount = useFavorites((s) => s.slugs.length);
   return (
     <header className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-4 py-5 phone:gap-2 phone:py-3">
       <Link
@@ -49,6 +54,7 @@ export function Navbar({ base = "" }: { base?: string }) {
             <Menu className="size-5" strokeWidth={1.5} />
           </SheetTrigger>
           <SheetContent
+            data-lenis-prevent
             side="left"
             showCloseButton={false}
             className="w-[min(86vw,340px)] gap-2 overflow-y-auto rounded-r-2xl border-r border-border bg-background px-5 pt-4 pb-6 shadow-[12px_0_40px_rgb(0_0_0/0.28)] data-[side=left]:w-[min(86vw,340px)] data-[side=left]:data-ending-style:-translate-x-full data-[side=left]:data-starting-style:-translate-x-full data-[side=left]:sm:max-w-none"
@@ -153,24 +159,30 @@ export function Navbar({ base = "" }: { base?: string }) {
             className="h-auto flex-1 border-0 bg-transparent p-0 text-[13px] shadow-none focus-visible:ring-0 dark:bg-transparent"
           />
         </label>
-        <a href={`${base}#wishlist`} aria-label="Wishlist" className={iconBtn}>
+        <Link href="/wishlist" aria-label={`Wishlist, ${favCount} items`} className={cn(iconBtn, "relative")}>
           <Heart className="size-5" strokeWidth={1.5} />
-        </a>
-        <a
-          href={`${base}#cart`}
-          aria-label="Cart, 0 items"
+          {favCount > 0 && (
+            <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-5 items-center justify-center rounded-pill bg-accent px-1 text-[11px] font-semibold text-background">
+              {favCount}
+            </span>
+          )}
+        </Link>
+        <button
+          type="button"
+          onClick={openCart}
+          aria-label={`Cart, ${count} items`}
           className={cn(
             iconBtn,
             label,
-            "w-auto gap-2 px-4 phone:gap-1.5 phone:px-3",
+            "w-auto cursor-pointer gap-2 px-4 phone:gap-1.5 phone:px-3",
           )}
         >
           <ShoppingBag className="size-5" strokeWidth={1.5} />
           <span className="phone:hidden">Cart</span>
           <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-pill bg-foreground px-1.5 text-[11px] tracking-normal text-background">
-            0
+            {count}
           </span>
-        </a>
+        </button>
       </div>
     </header>
   );

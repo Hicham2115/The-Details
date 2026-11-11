@@ -1,8 +1,13 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Heart, Plus } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { formatPrice, products, type Product } from "@/lib/data";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { formatPrice, productOptions, products, type Product } from "@/lib/data";
+import { useCart } from "@/stores/cart-store";
+import { useFavorites } from "@/stores/favorites-store";
 import { cn } from "@/lib/utils";
 import { SectionHead, SectionTitle } from "./section-head";
 
@@ -13,6 +18,24 @@ const tagStyle: Record<NonNullable<Product["tag"]>, string> = {
 };
 
 export function ProductCard({ p }: { p: Product }) {
+  const router = useRouter();
+  const add = useCart((s) => s.add);
+  const openCart = useCart((s) => s.open);
+  const isFav = useFavorites((s) => s.slugs.includes(p.slug));
+  const toggleFav = useFavorites((s) => s.toggle);
+
+  const quickAdd = () => {
+    const options = productOptions(p);
+    // More than one choice (e.g. ring pack): send them to the page to pick.
+    if (options && options.length > 1) {
+      toast("Pick an option first");
+      router.push(`/products/${p.slug}`);
+      return;
+    }
+    add(p.slug, options?.[0] ?? null, 1);
+    openCart();
+  };
+
   return (
     <article className="relative flex flex-col gap-3 rounded-card border border-border bg-surface p-3 group transition-all duration-400 hover:border-accent hover:shadow-glow phone:gap-2 phone:p-2">
       <div className="relative aspect-[4/5] overflow-hidden rounded-tag bg-deep">
@@ -51,10 +74,18 @@ export function ProductCard({ p }: { p: Product }) {
         )}
         <button
           type="button"
-          aria-label={`Add ${p.name.split(" — ")[0]} to wishlist`}
-          className="absolute top-2 right-2 z-10 inline-flex size-11 cursor-pointer items-center justify-center rounded-pill border border-border bg-surface text-foreground transition-all hover:scale-110 hover:border-accent hover:bg-tag-sale hover:text-accent"
+          aria-label={isFav ? `Remove ${p.name.split(" — ")[0]} from wishlist` : `Add ${p.name.split(" — ")[0]} to wishlist`}
+          aria-pressed={isFav}
+          onClick={() => {
+            const now = toggleFav(p.slug);
+            toast(now ? "Saved to wishlist" : "Removed from wishlist");
+          }}
+          className={cn(
+            "absolute top-2 right-2 z-10 inline-flex size-11 cursor-pointer items-center justify-center rounded-pill border border-border bg-surface text-foreground transition-all hover:scale-110 hover:border-accent hover:bg-tag-sale hover:text-accent",
+            isFav && "border-accent bg-tag-sale text-accent",
+          )}
         >
-          <Heart className="size-5" strokeWidth={1.5} />
+          <Heart className={cn("size-5", isFav && "fill-current")} strokeWidth={1.5} />
         </button>
       </div>
       <div className="flex items-end justify-between gap-3 px-1 pb-1">
@@ -84,6 +115,7 @@ export function ProductCard({ p }: { p: Product }) {
         <button
           type="button"
           aria-label={`Add ${p.name.split(" — ")[0]} to cart`}
+          onClick={quickAdd}
           className="relative z-10 inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-pill bg-foreground text-background transition-all hover:scale-110 hover:bg-accent"
         >
           <Plus
@@ -109,13 +141,13 @@ export function BestSellers() {
           <p className="m-0 font-serif text-[22px] leading-[1.2] text-muted-foreground phone:text-lg">
             Found, not mass-made.
           </p>
-          <a
+          <Link
             href="/products"
             className={buttonVariants({ variant: "line", size: "pill" })}
           >
             <span>View all</span>
             <ArrowUpRight className="size-[18px]" strokeWidth={1.5} />
-          </a>
+          </Link>
         </div>
       </SectionHead>
       <div className="grid grid-cols-4 gap-6 tablet:grid-cols-2 tablet:gap-4 phone:gap-2.5">

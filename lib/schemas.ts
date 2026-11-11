@@ -27,3 +27,27 @@ export type ContactInput = z.infer<typeof contactSchema>;
 
 export const subscribeSchema = z.object({ email: emailSchema });
 export type SubscribeInput = z.infer<typeof subscribeSchema>;
+
+export const AREAS = ["Hay Hassani", "Maarif", "Médina", "Other area in Casablanca"] as const;
+
+export const orderSchema = z.object({
+  fullName: z.string().trim().min(2, "Enter your full name").max(80, "Max 80 characters"),
+  phone: z
+    .string()
+    .trim()
+    .transform((v) => v.replace(/[\s.-]/g, ""))
+    .pipe(z.string().regex(/^(?:\+212|0)[5-7]\d{8}$/, "Enter a valid Moroccan phone number")),
+  area: z.enum(AREAS),
+  address: z.string().trim().min(5, "Enter your address").max(200, "Max 200 characters"),
+  items: z
+    .array(
+      z.object({
+        slug: z.string().min(1).max(80),
+        option: z.string().max(40).nullable(),
+        qty: z.number().int().min(1).max(10),
+      }),
+    )
+    .min(1, "Your cart is empty")
+    .max(30),
+});
+export type OrderInput = z.infer<typeof orderSchema>;

@@ -5,10 +5,11 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight, Heart, Minus, Plus, ShoppingBag, Truck, Wallet, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { buttonVariants } from "@/components/ui/button";
-import { formatPrice, type Product } from "@/lib/data";
+import { formatPrice, productOptions, type Product } from "@/lib/data";
+import { useCart } from "@/stores/cart-store";
+import { useFavorites } from "@/stores/favorites-store";
 import { cn } from "@/lib/utils";
 
-const BELT_SIZES = ["102 cm", "112 cm", "122 cm"] as const;
 
 const tagStyle: Record<NonNullable<Product["tag"]>, string> = {
   New: "bg-tag-new text-foreground",
@@ -16,7 +17,7 @@ const tagStyle: Record<NonNullable<Product["tag"]>, string> = {
   "Pre-order": "bg-tag-preorder text-foreground",
 };
 
-const perks = [
+const basePerks = [
   { icon: Wallet, title: "Cash on delivery", text: "Pay in dirhams when your order arrives." },
   { icon: Truck, title: "Free in Hay Hassani, Maarif and Médina", text: "30 DH delivery everywhere else." },
   { icon: Clock, title: "Delivered within 1 day", text: "We message you as soon as it ships." },
@@ -24,22 +25,28 @@ const perks = [
 
 export function ProductDetail({ p }: { p: Product }) {
   const [index, setIndex] = useState(0);
-  const [size, setSize] = useState<string | null>(null);
+  const sizes = productOptions(p) ?? [];
+  const hasOption = sizes.length > 0;
+  const label = p.optionLabel ?? "Size";
+  const add = useCart((s) => s.add);
+  const openCart = useCart((s) => s.open);
+  const liked = useFavorites((s) => s.slugs.includes(p.slug));
+  const toggleFav = useFavorites((s) => s.toggle);
+  const [size, setSize] = useState<string | null>(sizes.length === 1 ? sizes[0] : null);
   const [qty, setQty] = useState(1);
-  const [liked, setLiked] = useState(false);
   const [sizeError, setSizeError] = useState(false);
 
-  const isBelt = p.category === "Belts";
   const count = p.images.length;
   const go = (i: number) => setIndex((i + count) % count);
 
   const addToCart = () => {
-    if (isBelt && !size) {
+    if (hasOption && !size) {
       setSizeError(true);
-      toast.error("Pick a size first");
+      toast.error(`Pick a ${label.toLowerCase()} first`);
       return;
     }
-    toast.success(`${qty} × ${p.name} added to cart`);
+    add(p.slug, size, qty);
+    openCart();
   };
 
   return (
@@ -132,14 +139,14 @@ export function ProductDetail({ p }: { p: Product }) {
           </p>
         </div>
 
-        {isBelt && (
+        {hasOption && (
           <fieldset className="m-0 flex flex-col gap-3 border-0 p-0">
             <legend className="mb-3 flex w-full items-center justify-between p-0 text-xs font-semibold tracking-[0.08em] uppercase">
-              <span className="text-faint">Size (length)</span>
-              {sizeError && <span role="alert" className="text-accent normal-case tracking-normal">Pick a size</span>}
+              <span className="text-faint">{label}</span>
+              {sizeError && <span role="alert" className="text-accent normal-case tracking-normal">Pick a {label.toLowerCase()}</span>}
             </legend>
-            <div className="grid grid-cols-3 gap-2">
-              {BELT_SIZES.map((s) => (
+            <div className="flex flex-wrap gap-2">
+              {sizes.map((s) => (
                 <button
                   key={s}
                   type="button"
@@ -149,7 +156,7 @@ export function ProductDetail({ p }: { p: Product }) {
                     setSizeError(false);
                   }}
                   className={cn(
-                    "inline-flex min-h-11 cursor-pointer items-center justify-center rounded-pill border text-xs font-semibold tracking-[0.04em] uppercase transition-colors",
+                    "inline-flex min-h-11 cursor-pointer items-center justify-center rounded-pill border px-6 text-xs font-semibold tracking-[0.04em] uppercase transition-colors",
                     size === s
                       ? "border-foreground bg-foreground text-background"
                       : "border-border hover:border-foreground hover:bg-surface",
@@ -196,7 +203,7 @@ export function ProductDetail({ p }: { p: Product }) {
             type="button"
             aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
             aria-pressed={liked}
-            onClick={() => setLiked((v) => !v)}
+            onClick={() => toast(toggleFav(p.slug) ? "Saved to wishlist" : "Removed from wishlist")}
             className={cn(
               "inline-flex size-12 cursor-pointer items-center justify-center rounded-pill border transition-colors",
               liked ? "border-accent bg-tag-sale text-accent" : "border-border hover:border-accent hover:text-accent",
@@ -207,7 +214,7 @@ export function ProductDetail({ p }: { p: Product }) {
         </div>
 
         <ul className="m-0 flex list-none flex-col divide-y divide-border rounded-card border border-border bg-surface p-0">
-          {perks.map(({ icon: Icon, title, text }) => (
+          {basePerks.map(({ icon: Icon, title, text }) => (
             <li key={title} className="flex items-start gap-4 p-4">
               <Icon className="mt-0.5 size-5 shrink-0 text-accent" strokeWidth={1.5} />
               <div>

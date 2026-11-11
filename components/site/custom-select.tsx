@@ -30,6 +30,7 @@ export function CustomSelect<T extends string>({
   const autoId = useId();
   const listId = `${id ?? autoId}-list`;
   const root = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLUListElement>(null);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
 
@@ -44,6 +45,11 @@ export function CustomSelect<T extends string>({
     };
     document.addEventListener("pointerdown", onDown);
     return () => document.removeEventListener("pointerdown", onDown);
+  }, [open]);
+
+  // Keep the whole list visible: scroll the nearest scrollable parent (page or drawer) if it is cut off.
+  useEffect(() => {
+    if (open) list.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }, [open]);
 
   const openList = () => {
@@ -98,10 +104,12 @@ export function CustomSelect<T extends string>({
 
       <ul
         id={listId}
+        ref={list}
+        data-lenis-prevent
         role="listbox"
         tabIndex={-1}
         className={cn(
-          "absolute z-40 mt-2 min-w-full origin-top overflow-hidden rounded-card border border-border bg-deep p-1.5 shadow-lift",
+          "absolute z-40 mt-2 max-h-[min(320px,50dvh)] min-w-full origin-top overflow-y-auto overscroll-contain rounded-card border border-border bg-deep p-1.5 shadow-lift",
           "transition-[opacity,transform,visibility] duration-300",
           align === "right" ? "right-0" : "left-0",
           open ? "visible translate-y-0 scale-100 opacity-100" : "invisible -translate-y-2 scale-95 opacity-0",

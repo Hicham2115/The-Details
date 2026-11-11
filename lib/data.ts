@@ -16,6 +16,10 @@ export type Product = {
   price: number;
   oldPrice?: number;
   tag?: "New" | "Sale" | "Pre-order";
+  /** Belts only. Omit to offer the default lengths. */
+  sizes?: string[];
+  /** Label for the option picker. Defaults to "Size". */
+  optionLabel?: string;
   /** First image is the main one; the second shows on hover. */
   images: string[];
   alt: string;
@@ -34,7 +38,7 @@ const allProducts: Product[] = [
     slug: "love-hurts-belt",
     category: "Belts",
     variant: "Burgundy / Silver buckle",
-    price: 89,
+    price: 110,
     tag: "New",
     images: img("love-hurts-belt", 6),
     alt: "Burgundy embossed belt with a silver heart and dagger buckle reading Love Hurts",
@@ -44,9 +48,7 @@ const allProducts: Product[] = [
     slug: "snake-buckle-belt-violet",
     category: "Belts",
     variant: "Violet / Silver buckle",
-    price: 69,
-    oldPrice: 89,
-    tag: "Sale",
+    price: 110,
     images: img("snake-buckle-belt-violet", 5),
     alt: "Violet snakeskin-print belt with a silver coiled snake buckle",
   },
@@ -55,7 +57,7 @@ const allProducts: Product[] = [
     slug: "headline-case-silver",
     category: "Cases",
     variant: "Metal / Printed cover",
-    price: 59,
+    price: 100,
     images: img("headline-case-silver", 4),
     alt: "Silver metal cigarette case with a vintage newspaper headline cover",
   },
@@ -63,17 +65,19 @@ const allProducts: Product[] = [
     name: "Gothic Rings Set",
     slug: "gothic-rings-set",
     category: "Rings",
-    variant: "Silver / Set of 12",
-    price: 49, // TODO price
+    variant: "Silver / Pack of 4 rings",
+    price: 100,
+    optionLabel: "Pack",
+    sizes: ["Pack 1", "Pack 2", "Pack 3"],
     images: img("gothic-rings-set", 4),
-    alt: "Set of twelve silver gothic rings with skulls, stars and black stones",
+    alt: "Silver gothic rings with skulls, stars and black stones",
   },
   {
     name: "Bull Head Western Belt",
     slug: "bull-head-western-belt",
     category: "Belts",
     variant: "Brown / Antique brass buckle",
-    price: 79, // TODO price
+    price: 110,
     images: img("bull-head-western-belt", 5),
     alt: "Brown embossed leather belt with an antique brass bull head buckle",
   },
@@ -82,7 +86,7 @@ const allProducts: Product[] = [
     slug: "grim-reaper-belt",
     category: "Belts",
     variant: "Red / Antique silver buckle",
-    price: 89, // TODO price
+    price: 110,
     images: img("grim-reaper-belt", 4),
     alt: "Red embossed belt with an antique silver Grim Reaper skull buckle",
   },
@@ -91,7 +95,7 @@ const allProducts: Product[] = [
     slug: "leopard-plush-belt",
     category: "Belts",
     variant: "Pink / Silver double buckle",
-    price: 59, // TODO price
+    price: 110,
     images: img("leopard-plush-belt", 2),
     alt: "Pink leopard-print plush double row belt with a silver buckle",
   },
@@ -100,7 +104,7 @@ const allProducts: Product[] = [
     slug: "pop-art-girl-case",
     category: "Cases",
     variant: "Metal / Printed cover",
-    price: 59, // TODO price
+    price: 100,
     images: img("pop-art-girl-case", 4),
     alt: "Silver metal cigarette case printed with a pop art illustration of a girl with red lips",
   },
@@ -109,7 +113,7 @@ const allProducts: Product[] = [
     slug: "starry-night-case",
     category: "Cases",
     variant: "Metal / Printed cover",
-    price: 59, // TODO price
+    price: 100,
     images: img("starry-night-case", 4),
     alt: "Silver metal cigarette case printed with a swirling starry night painting",
   },
@@ -119,6 +123,14 @@ const allProducts: Product[] = [
 export const products: Product[] = [...allProducts].sort(
   (a, b) => categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category),
 );
+
+/** Choices the customer must make before ordering (belt size, ring pack). null = nothing to pick. */
+export const productOptions = (p: Product): string[] | null =>
+  p.sizes ?? (p.category === "Belts" ? ["Standard size"] : null);
+
+/** Areas of Casablanca with free delivery. Everywhere else costs DELIVERY_FEE. */
+export const FREE_DELIVERY_AREAS = ["Hay Hassani", "Maarif", "Médina"] as const;
+export const DELIVERY_FEE = 30;
 
 export const getProduct = (slug: string) => products.find((p) => p.slug === slug);
 

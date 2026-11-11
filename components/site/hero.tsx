@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -56,7 +57,7 @@ export function Hero() {
           <p className="m-0 max-w-[190px] text-[15px] leading-[22px] font-medium tablet:max-w-none tablet:whitespace-nowrap">
             Get 30% discount on your first order
           </p>
-          <a
+          <Link
             href="/products"
             className={cn(
               buttonVariants({ variant: "solid", size: "pill" }),
@@ -65,7 +66,7 @@ export function Hero() {
           >
             <span>Shop now</span>
             <ArrowUpRight className="size-[18px]" strokeWidth={1.5} />
-          </a>
+          </Link>
         </div>
 
         {/* Photos */}
