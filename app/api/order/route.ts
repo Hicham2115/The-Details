@@ -1,4 +1,4 @@
-import { DELIVERY_FEE, FREE_DELIVERY_AREAS, getProduct } from "@/lib/data";
+import { DELIVERY_FEE, getProduct } from "@/lib/data";
 import { orderSchema } from "@/lib/schemas";
 
 export async function POST(req: Request) {
@@ -10,7 +10,7 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-    const { items, area } = body.data;
+    const { items } = body.data;
 
     // Prices always come from the server, never from the browser.
     let subtotal = 0;
@@ -23,9 +23,7 @@ export async function POST(req: Request) {
         );
       subtotal += product.price * item.qty;
     }
-    const delivery = (FREE_DELIVERY_AREAS as readonly string[]).includes(area)
-      ? 0
-      : DELIVERY_FEE;
+    const delivery = DELIVERY_FEE;
 
     // TODO: deliver body.data (email, WhatsApp, database...). Nothing is stored yet.
     return Response.json({ ok: true, total: subtotal + delivery });

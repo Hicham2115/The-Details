@@ -19,7 +19,7 @@ This is Next 16 (React 19, Tailwind 4). `AGENTS.md` says its APIs differ from ol
 
 ## Architecture
 
-- **Data is code, not a database.** `lib/data.ts` holds the product list, categories, FAQ, nav and footer links, and the delivery rules (`FREE_DELIVERY_AREAS`, `DELIVERY_FEE`). Products are built with the `img(slug, count)` helper, which expects files `public/images/products/<slug>-0.webp` (the hand-picked main photo), `-1`, `-2`... The list is sorted belts, then cases, then rings. Prices marked `// TODO price` are provisional guesses awaiting the owner.
+- **Data is code, not a database.** `lib/data.ts` holds the product list, categories, FAQ, nav and footer links, and the flat delivery fee (`DELIVERY_FEE`). Products are built with the `img(slug, count)` helper, which expects files `public/images/products/<slug>-0.webp` (the hand-picked main photo), `-1`, `-2`... The list is sorted belts, then cases, then rings. Prices marked `// TODO price` are provisional guesses awaiting the owner.
 - **Routes:** `/` (sections in `components/site/*`), `/products` (filterable list), `/products/[slug]`, `/wishlist`, `app/not-found.tsx`, and API routes `/api/contact`, `/api/subscribe`, `/api/order`. The API routes validate with zod and return `{ ok: true }` but **do not deliver or store anything yet** (each has a TODO). `/api/order` recomputes prices and the delivery fee on the server from `lib/data.ts`; never trust prices from the client.
 - **Client state is Zustand** (`stores/cart-store.ts`, `stores/favorites-store.ts`), persisted to localStorage with `skipHydration: true`. `components/providers.tsx` calls `persist.rehydrate()` after mount (so SSR output matches), runs Lenis smooth scroll, scrolls to top on route change unless the URL has a hash, and mounts the global `CartDrawer` next to `QueryClientProvider`. Server data and mutations go through TanStack Query hooks in `hooks/` using the axios instance in `lib/axios.ts` (`baseURL: "/api"`). Errors surface as Sonner toasts via `getErrorMessage` in `lib/errors.ts`.
 - **Forms** validate with the zod schemas in `lib/schemas.ts` (shared by client and API routes).
@@ -33,7 +33,7 @@ This is Next 16 (React 19, Tailwind 4). `AGENTS.md` says its APIs differ from ol
 ## Business rules reflected in the UI
 
 - Payment: cash on delivery only. Never mention other payment methods.
-- Delivery: free in Hay Hassani, Maarif and Médina; 30 DH elsewhere (FAQ, product pages, cart and `/api/order` all use this).
+- Delivery: flat 30 DH anywhere in Casablanca, no free areas (FAQ, product pages, cart and `/api/order` all use this).
 - Still-marked placeholders: `[YOUR WHATSAPP]` in the contact section, and social links (Instagram, TikTok, WhatsApp), Privacy and Terms are `#` stubs.
 
 ## Working on macOS

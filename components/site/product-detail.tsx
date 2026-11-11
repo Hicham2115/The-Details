@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight, Heart, Minus, Plus, ShoppingBag, Truck, Wallet, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { buttonVariants } from "@/components/ui/button";
-import { formatPrice, productOptions, type Product } from "@/lib/data";
+import { discountPercent, formatPrice, productOptions, type Product } from "@/lib/data";
 import { useCart } from "@/stores/cart-store";
 import { useFavorites } from "@/stores/favorites-store";
 import { cn } from "@/lib/utils";
@@ -19,7 +19,7 @@ const tagStyle: Record<NonNullable<Product["tag"]>, string> = {
 
 const basePerks = [
   { icon: Wallet, title: "Cash on delivery", text: "Pay in dirhams when your order arrives." },
-  { icon: Truck, title: "Free in Hay Hassani, Maarif and Médina", text: "30 DH delivery everywhere else." },
+  { icon: Truck, title: "30 DH delivery", text: "Anywhere in Casablanca." },
   { icon: Clock, title: "Delivered within 1 day", text: "We message you as soon as it ships." },
 ];
 
@@ -131,12 +131,14 @@ export function ProductDetail({ p }: { p: Product }) {
           <p className="m-0 text-xs leading-4 font-semibold tracking-[0.08em] text-faint uppercase">{p.category}</p>
           <h1 className="m-0 font-serif text-[clamp(34px,4.4vw,60px)] leading-[1.03] font-normal">{p.name}</h1>
           <p className="m-0 text-sm text-muted-foreground">{p.variant}</p>
-          <p className={cn("m-0 flex items-baseline gap-3 font-display text-[44px] leading-none", p.oldPrice && "text-accent")}>
+          <p className="m-0 flex flex-wrap items-baseline gap-x-3 gap-y-2 font-display text-[44px] leading-none text-accent">
             <span>{formatPrice(p.price)}</span>
-            {p.oldPrice && (
-              <span className="font-sans text-lg font-normal text-faint line-through">{formatPrice(p.oldPrice)}</span>
-            )}
+            <span className="font-sans text-lg font-normal text-faint line-through">{formatPrice(p.oldPrice)}</span>
+            <span className="self-center rounded-tag bg-tag-sale px-2 py-1 font-sans text-xs leading-4 font-semibold tracking-[0.08em] uppercase">
+              Promo −{discountPercent(p)}%
+            </span>
           </p>
+          <p className="m-0 text-xs text-muted-foreground">All prices are promo prices for a limited time.</p>
         </div>
 
         {hasOption && (

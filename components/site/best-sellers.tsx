@@ -5,7 +5,7 @@ import { ArrowUpRight, Heart, Plus } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { formatPrice, productOptions, products, type Product } from "@/lib/data";
+import { discountPercent, formatPrice, productOptions, products, type Product } from "@/lib/data";
 import { useCart } from "@/stores/cart-store";
 import { useFavorites } from "@/stores/favorites-store";
 import { cn } from "@/lib/utils";
@@ -100,16 +100,16 @@ export function ProductCard({ p }: { p: Product }) {
           </p>
           <p
             className={cn(
-              "mt-1 flex items-baseline gap-2 text-base leading-5 font-semibold phone:text-[15px]",
-              p.oldPrice && "text-accent",
+              "mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-base leading-5 font-semibold text-accent phone:text-[15px]",
             )}
           >
             <span>{formatPrice(p.price)}</span>
-            {p.oldPrice && (
-              <span className="text-sm font-normal text-faint line-through">
-                {formatPrice(p.oldPrice)}
-              </span>
-            )}
+            <span className="text-sm font-normal text-faint line-through">
+              {formatPrice(p.oldPrice)}
+            </span>
+            <span className="rounded-tag bg-tag-sale px-1.5 py-0.5 text-[11px] leading-4 font-semibold tracking-[0.04em] uppercase">
+              Promo −{discountPercent(p)}%
+            </span>
           </p>
         </div>
         <button

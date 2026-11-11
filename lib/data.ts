@@ -14,7 +14,8 @@ export type Product = {
   name: string;
   variant: string;
   price: number;
-  oldPrice?: number;
+  /** Every product is on promo: the price before the promo. */
+  oldPrice: number;
   tag?: "New" | "Sale" | "Pre-order";
   /** Belts only. Omit to offer the default lengths. */
   sizes?: string[];
@@ -42,6 +43,7 @@ const allProducts: Product[] = [
     category: "Belts",
     variant: "Burgundy / Silver buckle",
     price: 110,
+    oldPrice: 150, // TODO confirm the "before" price
     tag: "New",
     images: img("love-hurts-belt", 6),
     alt: "Burgundy embossed belt with a silver heart and dagger buckle reading Love Hurts",
@@ -52,6 +54,7 @@ const allProducts: Product[] = [
     category: "Belts",
     variant: "Violet / Silver buckle",
     price: 110,
+    oldPrice: 150, // TODO confirm the "before" price
     images: img("snake-buckle-belt-violet", 5),
     alt: "Violet snakeskin-print belt with a silver coiled snake buckle",
   },
@@ -61,6 +64,7 @@ const allProducts: Product[] = [
     category: "Cases",
     variant: "Metal / Printed cover",
     price: 100,
+    oldPrice: 140, // TODO confirm the "before" price
     images: img("headline-case-silver", 4),
     alt: "Silver metal cigarette case with a vintage newspaper headline cover",
   },
@@ -70,6 +74,7 @@ const allProducts: Product[] = [
     category: "Rings",
     variant: "Silver / Pack of 4 rings",
     price: 100,
+    oldPrice: 130, // TODO confirm the "before" price
     optionLabel: "Pack",
     sizes: ["Pack 1", "Pack 2", "Pack 3"],
     images: img("gothic-rings-set", 4),
@@ -81,6 +86,7 @@ const allProducts: Product[] = [
     category: "Belts",
     variant: "Brown / Antique brass buckle",
     price: 110,
+    oldPrice: 150, // TODO confirm the "before" price
     images: img("bull-head-western-belt", 5),
     alt: "Brown embossed leather belt with an antique brass bull head buckle",
   },
@@ -90,6 +96,7 @@ const allProducts: Product[] = [
     category: "Belts",
     variant: "Red / Antique silver buckle",
     price: 110,
+    oldPrice: 150, // TODO confirm the "before" price
     images: img("grim-reaper-belt", 4),
     alt: "Red embossed belt with an antique silver Grim Reaper skull buckle",
   },
@@ -99,6 +106,7 @@ const allProducts: Product[] = [
     category: "Belts",
     variant: "Pink / Silver double buckle",
     price: 110,
+    oldPrice: 150, // TODO confirm the "before" price
     images: img("leopard-plush-belt", 2),
     alt: "Pink leopard-print plush double row belt with a silver buckle",
   },
@@ -108,6 +116,7 @@ const allProducts: Product[] = [
     category: "Cases",
     variant: "Metal / Printed cover",
     price: 100,
+    oldPrice: 140, // TODO confirm the "before" price
     images: img("pop-art-girl-case", 4),
     alt: "Silver metal cigarette case printed with a pop art illustration of a girl with red lips",
   },
@@ -117,6 +126,7 @@ const allProducts: Product[] = [
     category: "Cases",
     variant: "Metal / Printed cover",
     price: 100,
+    oldPrice: 140, // TODO confirm the "before" price
     images: img("starry-night-case", 4),
     alt: "Silver metal cigarette case printed with a swirling starry night painting",
   },
@@ -132,8 +142,7 @@ export const products: Product[] = [...allProducts].sort(
 export const productOptions = (p: Product): string[] | null =>
   p.sizes ?? (p.category === "Belts" ? ["Standard size"] : null);
 
-/** Areas of Casablanca with free delivery. Everywhere else costs DELIVERY_FEE. */
-export const FREE_DELIVERY_AREAS = ["Hay Hassani", "Maarif", "Médina"] as const;
+/** Flat delivery fee (DH) anywhere in Casablanca. */
 export const DELIVERY_FEE = 30;
 
 export const getProduct = (slug: string) =>
@@ -197,11 +206,11 @@ export const hotspots = [
 export const faqs = [
   {
     q: "How long does delivery take?",
-    a: "Orders are delivered across Morocco within 1 day. Delivery is free in Hay Hassani, Maarif and Médina. Anywhere else costs 30 DH. We message you on WhatsApp as soon as your parcel ships.",
+    a: "Orders are delivered within 1 day. Delivery costs 30 DH anywhere in Casablanca. We message you on WhatsApp as soon as your parcel ships.",
   },
   {
     q: "Can I pay cash on delivery?",
-    a: "Yes. We only accept cash on delivery (COD): you pay in dirhams (DH) when your order arrives. Delivery is free in Hay Hassani, Maarif and Médina, and 30 DH elsewhere.",
+    a: "Yes. We only accept cash on delivery (COD): you pay in dirhams (DH) when your order arrives. Delivery costs 30 DH anywhere in Casablanca.",
   },
 ];
 
@@ -233,5 +242,8 @@ export const footerColumns = [
     ],
   },
 ] as const;
+
+export const discountPercent = (p: Pick<Product, "price" | "oldPrice">) =>
+  Math.round((1 - p.price / p.oldPrice) * 100);
 
 export const formatPrice = (n: number) => `${n} DH`;

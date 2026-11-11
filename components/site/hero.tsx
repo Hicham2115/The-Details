@@ -78,13 +78,13 @@ export function Hero() {
               fill
               priority
               sizes="(max-width: 900px) 33vw, 250px"
-              className="object-cover group-hover:scale-105 object-[100%_50%]"
+              className="origin-left scale-[1.05] object-cover object-[100%_50%] group-hover:scale-[1.1]"
             />
           </div>
           <div
             className={cn(
               slot,
-              "h-[clamp(510px,28vw,690px)] flex-[1.25_1_0] tablet:h-[min(69vw,490px)] tablet:flex-[1.6_1_0]",
+              "h-[clamp(440px,24vw,600px)] flex-[1.25_1_0] tablet:flex-[1.6_1_0]",
             )}
           >
             <Image
@@ -103,7 +103,7 @@ export function Hero() {
               fill
               priority
               sizes="(max-width: 900px) 33vw, 250px"
-              className="object-cover group-hover:scale-105 object-[0%_50%]"
+              className="origin-right scale-[1.08] object-cover object-[0%_50%] group-hover:scale-[1.13]"
             />
           </div>
         </div>

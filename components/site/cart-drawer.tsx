@@ -25,17 +25,14 @@ import {
 import { useOrder } from "@/hooks/use-order";
 import {
   DELIVERY_FEE,
-  FREE_DELIVERY_AREAS,
   formatPrice,
   getProduct,
 } from "@/lib/data";
-import { AREAS, orderSchema } from "@/lib/schemas";
+import { orderSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 import { cartCount, cartSubtotal, lineKey, useCart } from "@/stores/cart-store";
-import { CustomSelect } from "./custom-select";
 
 type Step = "cart" | "checkout" | "done";
-type Area = (typeof AREAS)[number];
 
 const iconBtn =
   "inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-pill border border-border transition-colors hover:border-foreground hover:bg-surface";
@@ -54,16 +51,13 @@ export function CartDrawer() {
     phone: "",
     address: "",
   });
-  const [area, setArea] = useState<Area>("Hay Hassani");
   const [errors, setErrors] = useState<
     Partial<Record<"fullName" | "phone" | "address", string>>
   >({});
   const [doneTotal, setDoneTotal] = useState(0);
 
   const subtotal = cartSubtotal(lines);
-  const delivery = (FREE_DELIVERY_AREAS as readonly string[]).includes(area)
-    ? 0
-    : DELIVERY_FEE;
+  const delivery = DELIVERY_FEE;
   const total = subtotal + delivery;
 
   const onOpenChange = (open: boolean) => {
@@ -76,7 +70,6 @@ export function CartDrawer() {
     e.preventDefault();
     const parsed = orderSchema.safeParse({
       ...values,
-      area,
       items: lines.map(({ slug, option, qty }) => ({ slug, option, qty })),
     });
     if (!parsed.success) {
@@ -256,8 +249,8 @@ export function CartDrawer() {
                 </span>
               </p>
               <p className="m-0 text-xs text-muted-foreground">
-                Delivery is free in Hay Hassani, Maarif and Médina, and{" "}
-                {DELIVERY_FEE} DH elsewhere. Pay cash on delivery.
+                Delivery is {DELIVERY_FEE} DH anywhere in Casablanca. Pay cash on
+                delivery.
               </p>
               <button
                 type="button"
@@ -321,19 +314,8 @@ export function CartDrawer() {
                 )}
               </div>
               <div className="flex flex-col">
-                <label htmlFor="o-area" className={labelCls}>
-                  Area
-                </label>
-                <CustomSelect
-                  id="o-area"
-                  value={area}
-                  onChange={setArea}
-                  options={AREAS.map((a) => ({ value: a, label: a }))}
-                />
-              </div>
-              <div className="flex flex-col">
                 <label htmlFor="o-address" className={labelCls}>
-                  Address
+                  Address (Casablanca)
                 </label>
                 <Input
                   id="o-address"
@@ -359,7 +341,7 @@ export function CartDrawer() {
               </p>
               <p className="m-0 flex justify-between">
                 <span className="text-muted-foreground">Delivery</span>
-                <span>{delivery === 0 ? "Free" : formatPrice(delivery)}</span>
+                <span>{formatPrice(delivery)}</span>
               </p>
               <p className="m-0 flex items-baseline justify-between">
                 <span className="font-semibold">Total (cash on delivery)</span>

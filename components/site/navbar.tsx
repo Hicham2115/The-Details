@@ -26,6 +26,9 @@ import { SearchBox } from "./search-box";
 import { cartCount, useCart } from "@/stores/cart-store";
 import { useFavorites } from "@/stores/favorites-store";
 
+// "#section" links need the home path in front on other pages; real paths like "/products" must not get it.
+const linkTo = (base: string, href: string) => (href.startsWith("#") ? `${base}${href}` : href);
+
 const iconBtn =
   "inline-flex size-11 items-center justify-center rounded-pill border border-border text-foreground transition-colors hover:border-foreground hover:bg-surface";
 const label = "text-xs leading-4 font-semibold tracking-[0.08em] uppercase";
@@ -89,7 +92,7 @@ export function Navbar({ base = "" }: { base?: string }) {
                 <SheetClose
                   key={l.href}
                   nativeButton={false}
-                  render={<a href={`${base}${l.href}`} />}
+                  render={<a href={linkTo(base, l.href)} />}
                   className="flex min-h-14 items-center justify-between border-b border-border px-1 font-display text-[34px] leading-none tracking-[0.01em] uppercase transition-colors hover:text-accent"
                 >
                   <span>{l.label}</span>
@@ -130,7 +133,7 @@ export function Navbar({ base = "" }: { base?: string }) {
         {navLinks.map((l, i) => (
           <a
             key={l.href}
-            href={`${base}${l.href}`}
+            href={linkTo(base, l.href)}
             aria-current={i === 0 ? "page" : undefined}
             className={cn(
               label,

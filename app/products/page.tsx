@@ -38,6 +38,9 @@ export default function ProductsPage() {
             <p className="m-0 mt-4 max-w-[420px] font-serif text-[22px] leading-[1.2] text-muted-foreground phone:text-lg">
               Found, not mass-made. Pick your details.
             </p>
+            <p className="m-0 mt-3 inline-flex items-center rounded-pill border border-accent px-4 py-2 text-xs font-semibold tracking-[0.08em] text-accent uppercase">
+              All prices are promo prices
+            </p>
           </section> */}
 
           <div className="mt-10">
