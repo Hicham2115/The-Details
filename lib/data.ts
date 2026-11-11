@@ -9,6 +9,7 @@ export const navLinks = [
 export type ProductCategory = "Belts" | "Rings" | "Cases";
 
 export type Product = {
+  slug: string;
   category: ProductCategory;
   name: string;
   variant: string;
@@ -20,14 +21,17 @@ export type Product = {
   alt: string;
 };
 
-// "-0" is the hand-picked main photo (first image.png). Rings has none, so it starts at "-1".
+// "-0" is the hand-picked main photo (first image.png). Pass hasMain=false if a product has none.
 const img = (slug: string, count: number, hasMain = true) =>
   Array.from({ length: count + (hasMain ? 1 : 0) }, (_, i) => `/images/products/${slug}-${i + (hasMain ? 0 : 1)}.webp`);
 
 // NOTE: prices marked "TODO price" are provisional. Confirm them before launch.
-export const products: Product[] = [
+const categoryOrder: ProductCategory[] = ["Belts", "Cases", "Rings"];
+
+const allProducts: Product[] = [
   {
     name: "Love Hurts Belt",
+    slug: "love-hurts-belt",
     category: "Belts",
     variant: "Burgundy / Silver buckle",
     price: 89,
@@ -37,6 +41,7 @@ export const products: Product[] = [
   },
   {
     name: "Snake Buckle Belt — Violet",
+    slug: "snake-buckle-belt-violet",
     category: "Belts",
     variant: "Violet / Silver buckle",
     price: 69,
@@ -47,6 +52,7 @@ export const products: Product[] = [
   },
   {
     name: "Headline Case — Silver",
+    slug: "headline-case-silver",
     category: "Cases",
     variant: "Metal / Printed cover",
     price: 59,
@@ -55,14 +61,16 @@ export const products: Product[] = [
   },
   {
     name: "Gothic Rings Set",
+    slug: "gothic-rings-set",
     category: "Rings",
     variant: "Silver / Set of 12",
     price: 49, // TODO price
-    images: img("gothic-rings-set", 4, false),
+    images: img("gothic-rings-set", 4),
     alt: "Set of twelve silver gothic rings with skulls, stars and black stones",
   },
   {
     name: "Bull Head Western Belt",
+    slug: "bull-head-western-belt",
     category: "Belts",
     variant: "Brown / Antique brass buckle",
     price: 79, // TODO price
@@ -71,6 +79,7 @@ export const products: Product[] = [
   },
   {
     name: "Grim Reaper Belt",
+    slug: "grim-reaper-belt",
     category: "Belts",
     variant: "Red / Antique silver buckle",
     price: 89, // TODO price
@@ -79,6 +88,7 @@ export const products: Product[] = [
   },
   {
     name: "Leopard Plush Belt",
+    slug: "leopard-plush-belt",
     category: "Belts",
     variant: "Pink / Silver double buckle",
     price: 59, // TODO price
@@ -86,7 +96,17 @@ export const products: Product[] = [
     alt: "Pink leopard-print plush double row belt with a silver buckle",
   },
   {
+    name: "Pop Art Girl Case",
+    slug: "pop-art-girl-case",
+    category: "Cases",
+    variant: "Metal / Printed cover",
+    price: 59, // TODO price
+    images: img("pop-art-girl-case", 4),
+    alt: "Silver metal cigarette case printed with a pop art illustration of a girl with red lips",
+  },
+  {
     name: "Starry Night Case",
+    slug: "starry-night-case",
     category: "Cases",
     variant: "Metal / Printed cover",
     price: 59, // TODO price
@@ -94,6 +114,13 @@ export const products: Product[] = [
     alt: "Silver metal cigarette case printed with a swirling starry night painting",
   },
 ];
+
+// Belts first, then cases, then rings (stable: keeps the order above inside each group).
+export const products: Product[] = [...allProducts].sort(
+  (a, b) => categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category),
+);
+
+export const getProduct = (slug: string) => products.find((p) => p.slug === slug);
 
 export const categories = [
   { name: "Belts & Buckles", href: "/products?category=Belts", image: "/images/category-belts-buckles.jpg", size: "big", position: "tablet:object-[50%_21.7%]" },
