@@ -107,9 +107,9 @@ export function Footer() {
                 <a
                   key={label}
                   href={href}
-                  className="flex min-h-11 items-center text-sm text-foreground/70 transition-colors hover:text-foreground hover:underline"
+                  className="flex min-h-11 items-center text-sm text-foreground/70 transition-all hover:translate-x-1 hover:text-foreground"
                 >
-                  {label}
+                  <span className="link-underline">{label}</span>
                 </a>
               ))}
             </nav>
@@ -128,9 +128,9 @@ export function Footer() {
               <a
                 key={label}
                 href={href}
-                className="inline-flex min-h-11 items-center text-[13px] text-foreground/70 transition-colors hover:text-foreground hover:underline"
+                className="inline-flex min-h-11 items-center text-[13px] text-foreground/70 transition-all hover:translate-x-1 hover:text-foreground"
               >
-                {label}
+                <span className="link-underline">{label}</span>
               </a>
             ))}
           </div>

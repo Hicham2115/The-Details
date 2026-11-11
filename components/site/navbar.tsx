@@ -1,10 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, Heart, Menu, Search, ShoppingBag, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  Heart,
+  Menu,
+  Search,
+  ShoppingBag,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { navLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +42,10 @@ export function Navbar() {
       {/* Phone / tablet: hamburger + left drawer */}
       <div className="col-start-1 row-start-1 hidden justify-self-start tablet:block">
         <Sheet>
-          <SheetTrigger aria-label="Open menu" className={cn(iconBtn, "cursor-pointer")}>
+          <SheetTrigger
+            aria-label="Open menu"
+            className={cn(iconBtn, "cursor-pointer")}
+          >
             <Menu className="size-5" strokeWidth={1.5} />
           </SheetTrigger>
           <SheetContent
@@ -37,12 +54,19 @@ export function Navbar() {
             className="w-[min(86vw,340px)] gap-2 overflow-y-auto rounded-r-2xl border-r border-border bg-background px-5 pt-4 pb-6 shadow-[12px_0_40px_rgb(0_0_0/0.28)] data-[side=left]:w-[min(86vw,340px)] data-[side=left]:data-ending-style:-translate-x-full data-[side=left]:data-starting-style:-translate-x-full data-[side=left]:sm:max-w-none"
           >
             <div className="mb-2 flex min-h-11 items-center justify-between">
-              <SheetTitle className="font-logo text-[28px] leading-none font-bold">The Details</SheetTitle>
-              <SheetClose aria-label="Close menu" className={cn(iconBtn, "cursor-pointer bg-transparent")}>
+              <SheetTitle className="font-logo text-[28px] leading-none font-bold">
+                The Details
+              </SheetTitle>
+              <SheetClose
+                aria-label="Close menu"
+                className={cn(iconBtn, "cursor-pointer bg-transparent")}
+              >
                 <X className="size-5" strokeWidth={1.5} />
               </SheetClose>
             </div>
-            <SheetDescription className="sr-only">Site navigation</SheetDescription>
+            <SheetDescription className="sr-only">
+              Site navigation
+            </SheetDescription>
 
             <label className="mb-2 flex h-11 items-center gap-2 rounded-pill border border-border bg-surface px-4">
               <Search className="size-5" strokeWidth={1.5} />
@@ -54,7 +78,10 @@ export function Navbar() {
               />
             </label>
 
-            <nav aria-label="Mobile" className="flex flex-col border-t border-border">
+            <nav
+              aria-label="Mobile"
+              className="flex flex-col border-t border-border"
+            >
               {navLinks.map((l) => (
                 <SheetClose
                   key={l.href}
@@ -78,7 +105,11 @@ export function Navbar() {
               </SheetClose>
               <div className="flex items-center justify-between text-[13px] text-muted-foreground">
                 {["Instagram", "TikTok", "WhatsApp"].map((s) => (
-                  <a key={s} href={`#${s.toLowerCase()}`} className="inline-flex min-h-11 items-center hover:text-accent">
+                  <a
+                    key={s}
+                    href={`#${s.toLowerCase()}`}
+                    className="inline-flex min-h-11 items-center hover:text-accent"
+                  >
                     {s}
                   </a>
                 ))}
@@ -100,11 +131,14 @@ export function Navbar() {
             aria-current={i === 0 ? "page" : undefined}
             className={cn(
               label,
-              "inline-flex h-11 items-center rounded-pill border px-3.5 transition-colors hover:border-foreground",
+              "inline-flex h-11 items-center rounded-pill border px-3.5 transition-colors hover:border-foreground hover:bg-background",
               i === 0 ? "border-foreground" : "border-transparent",
             )}
           >
-            {l.label}
+            <span className="flip">
+              <span>{l.label}</span>
+              <span aria-hidden="true">{l.label}</span>
+            </span>
           </a>
         ))}
       </nav>
@@ -125,7 +159,11 @@ export function Navbar() {
         <a
           href="#cart"
           aria-label="Cart, 0 items"
-          className={cn(iconBtn, label, "w-auto gap-2 px-4 phone:gap-1.5 phone:px-3")}
+          className={cn(
+            iconBtn,
+            label,
+            "w-auto gap-2 px-4 phone:gap-1.5 phone:px-3",
+          )}
         >
           <ShoppingBag className="size-5" strokeWidth={1.5} />
           <span className="phone:hidden">Cart</span>

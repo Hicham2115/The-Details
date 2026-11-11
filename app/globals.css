@@ -167,3 +167,42 @@ html.lenis body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Animated underline: grows left to right on hover */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  padding-bottom: 2px;
+  transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+a:hover > .link-underline,
+a:focus-visible > .link-underline {
+  background-size: 100% 1px;
+}
+
+/* Text flip: label rolls up, accent copy rolls in */
+.flip {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+.flip > span {
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.flip > span:last-child {
+  position: absolute;
+  inset: 0;
+  color: var(--accent);
+  transform: translateY(110%);
+}
+a:hover > .flip > span:first-child,
+a:focus-visible > .flip > span:first-child {
+  transform: translateY(-110%);
+}
+a:hover > .flip > span:last-child,
+a:focus-visible > .flip > span:last-child {
+  transform: translateY(0);
+}
