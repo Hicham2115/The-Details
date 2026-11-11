@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SlidersHorizontal, X } from "lucide-react";
 import {
   formatPrice,
@@ -22,6 +22,13 @@ const categories = [
   "Cases",
 ] as const satisfies readonly ProductCategory[];
 const tags = ["New", "Sale", "Pre-order"] as const satisfies readonly Tag[];
+
+// Extra words people may search for, per category ("wallet" finds the cases).
+const searchWords: Record<ProductCategory, string> = {
+  Belts: "belt belts",
+  Cases: "case cases wallet wallets cigarette",
+  Rings: "ring rings",
+};
 
 const sortOptions = [
   { value: "featured", label: "Featured" },
@@ -56,9 +63,10 @@ function FilterGroup({
 }
 
 function ExplorerFromUrl() {
-  const param = useSearchParams().get("category");
-  const initial = categories.find((c) => c === param) ?? "All";
-  return <Explorer key={initial} initialCategory={initial} />;
+  const params = useSearchParams();
+  const initial = categories.find((c) => c === params.get("category")) ?? "All";
+  const query = (params.get("q") ?? "").trim().slice(0, 60);
+  return <Explorer key={initial} initialCategory={initial} query={query} />;
 }
 
 export function ProductsExplorer() {
@@ -69,7 +77,8 @@ export function ProductsExplorer() {
   );
 }
 
-function Explorer({ initialCategory }: { initialCategory: ProductCategory | "All" }) {
+function Explorer({ initialCategory, query }: { initialCategory: ProductCategory | "All"; query: string }) {
+  const router = useRouter();
   const [category, setCategory] = useState<ProductCategory | "All">(initialCategory);
   const [tag, setTag] = useState<Tag | "All">("All");
   const [limit, setLimit] = useState(maxPrice);
@@ -77,8 +86,10 @@ function Explorer({ initialCategory }: { initialCategory: ProductCategory | "All
   const [open, setOpen] = useState(false);
 
   const filtered = useMemo(() => {
+    const needle = query.toLowerCase();
     const list = products.filter(
       (p) =>
+        (!needle || `${p.name} ${p.variant} ${p.category} ${searchWords[p.category]} ${p.tag ?? ""}`.toLowerCase().includes(needle)) &&
         (category === "All" || p.category === category) &&
         (tag === "All" || p.tag === tag) &&
         p.price <= limit,
@@ -88,13 +99,14 @@ function Explorer({ initialCategory }: { initialCategory: ProductCategory | "All
     if (sort === "price-desc")
       return [...list].sort((a, b) => b.price - a.price);
     return list;
-  }, [category, tag, limit, sort]);
+  }, [query, category, tag, limit, sort]);
 
-  const isFiltered = category !== "All" || tag !== "All" || limit !== maxPrice;
+  const isFiltered = category !== "All" || tag !== "All" || limit !== maxPrice || query !== "";
   const reset = () => {
     setCategory("All");
     setTag("All");
     setLimit(maxPrice);
+    if (query) router.replace("/products", { scroll: false });
   };
 
   return (
@@ -193,6 +205,11 @@ function Explorer({ initialCategory }: { initialCategory: ProductCategory | "All
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <p className="m-0 text-sm text-muted-foreground" aria-live="polite">
             {filtered.length} {filtered.length === 1 ? "piece" : "pieces"}
+            {query && (
+              <>
+                {" "}for <span className="text-foreground">“{query}”</span>
+              </>
+            )}
           </p>
           <div className="flex items-center gap-3 text-xs font-semibold tracking-[0.08em] uppercase">
             <span className="text-faint">Sort</span>

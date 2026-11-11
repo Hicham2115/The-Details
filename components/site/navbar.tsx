@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import {
   ArrowUpRight,
@@ -21,6 +22,7 @@ import {
 } from "@/components/ui/sheet";
 import { navLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { SearchBox } from "./search-box";
 import { cartCount, useCart } from "@/stores/cart-store";
 import { useFavorites } from "@/stores/favorites-store";
 
@@ -29,6 +31,7 @@ const iconBtn =
 const label = "text-xs leading-4 font-semibold tracking-[0.08em] uppercase";
 
 export function Navbar({ base = "" }: { base?: string }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const count = useCart((s) => cartCount(s.lines));
   const openCart = useCart((s) => s.open);
   const favCount = useFavorites((s) => s.slugs.length);
@@ -46,7 +49,7 @@ export function Navbar({ base = "" }: { base?: string }) {
 
       {/* Phone / tablet: hamburger + left drawer */}
       <div className="col-start-1 row-start-1 hidden justify-self-start tablet:block">
-        <Sheet>
+        <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
           <SheetTrigger
             aria-label="Open menu"
             className={cn(iconBtn, "cursor-pointer")}
@@ -74,15 +77,9 @@ export function Navbar({ base = "" }: { base?: string }) {
               Site navigation
             </SheetDescription>
 
-            <label className="mb-2 flex h-11 items-center gap-2 rounded-pill border border-border bg-surface px-4">
-              <Search className="size-5" strokeWidth={1.5} />
-              <Input
-                type="search"
-                aria-label="Search products"
-                placeholder="Search"
-                className="h-auto flex-1 border-0 bg-transparent p-0 text-sm shadow-none focus-visible:ring-0 dark:bg-transparent"
-              />
-            </label>
+            <div className="mb-2">
+              <SearchBox className="h-11" inputClassName="text-sm" onSearch={() => setMenuOpen(false)} />
+            </div>
 
             <nav
               aria-label="Mobile"
@@ -150,16 +147,12 @@ export function Navbar({ base = "" }: { base?: string }) {
       </nav>
 
       <div className="col-start-3 row-start-1 flex items-center justify-end gap-2 justify-self-end">
-        <label className="flex h-11 w-[200px] items-center gap-2 rounded-pill border border-border bg-surface px-4 tablet:hidden">
-          <Search className="size-5 shrink-0" strokeWidth={1.5} />
-          <Input
-            type="search"
-            aria-label="Search products"
-            placeholder="Search"
-            className="h-auto flex-1 border-0 bg-transparent p-0 text-[13px] shadow-none focus-visible:ring-0 dark:bg-transparent"
-          />
-        </label>
-        <Link href="/wishlist" aria-label={`Wishlist, ${favCount} items`} className={cn(iconBtn, "relative")}>
+        <SearchBox className="h-11 w-[200px] tablet:hidden" />
+        <Link
+          href="/wishlist"
+          aria-label={`Wishlist, ${favCount} items`}
+          className={cn(iconBtn, "relative")}
+        >
           <Heart className="size-5" strokeWidth={1.5} />
           {favCount > 0 && (
             <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-5 items-center justify-center rounded-pill bg-accent px-1 text-[11px] font-semibold text-background">

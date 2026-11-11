@@ -1,8 +1,8 @@
 export const navLinks = [
   { label: "New", href: "#new" },
+  { label: "Collections", href: "/products" },
   { label: "About us", href: "#lookbook" },
   { label: "Delivery", href: "#faq" },
-  { label: "Collections", href: "#collections" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -27,7 +27,10 @@ export type Product = {
 
 // "-0" is the hand-picked main photo (first image.png). Pass hasMain=false if a product has none.
 const img = (slug: string, count: number, hasMain = true) =>
-  Array.from({ length: count + (hasMain ? 1 : 0) }, (_, i) => `/images/products/${slug}-${i + (hasMain ? 0 : 1)}.webp`);
+  Array.from(
+    { length: count + (hasMain ? 1 : 0) },
+    (_, i) => `/images/products/${slug}-${i + (hasMain ? 0 : 1)}.webp`,
+  );
 
 // NOTE: prices marked "TODO price" are provisional. Confirm them before launch.
 const categoryOrder: ProductCategory[] = ["Belts", "Cases", "Rings"];
@@ -121,7 +124,8 @@ const allProducts: Product[] = [
 
 // Belts first, then cases, then rings (stable: keeps the order above inside each group).
 export const products: Product[] = [...allProducts].sort(
-  (a, b) => categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category),
+  (a, b) =>
+    categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category),
 );
 
 /** Choices the customer must make before ordering (belt size, ring pack). null = nothing to pick. */
@@ -132,30 +136,102 @@ export const productOptions = (p: Product): string[] | null =>
 export const FREE_DELIVERY_AREAS = ["Hay Hassani", "Maarif", "Médina"] as const;
 export const DELIVERY_FEE = 30;
 
-export const getProduct = (slug: string) => products.find((p) => p.slug === slug);
+export const getProduct = (slug: string) =>
+  products.find((p) => p.slug === slug);
 
 export const categories = [
-  { name: "Belts & Buckles", href: "/products?category=Belts", image: "/images/category-belts-buckles.jpg", size: "big", position: "tablet:object-[50%_21.7%]" },
-  { name: "Rings", href: "/products?category=Rings", image: "/images/product-star-ring-set.jpg", size: "small", position: "object-[50%_40%]" },
-  { name: "Cases", href: "/products?category=Cases", image: "/images/product-headline-case-silver.jpg", size: "small", position: "object-[50%_30%]" },
-  { name: "Chains & Pendants", href: "/products", image: "/images/category-chains-pendants.jpg", size: "wide", position: "" },
+  {
+    name: "Belts & Buckles",
+    href: "/products?category=Belts",
+    image: "/images/category-belts-buckles.jpg",
+    size: "big",
+    position: "tablet:object-[50%_21.7%]",
+  },
+  {
+    name: "Rings",
+    href: "/products?category=Rings",
+    image: "/images/product-star-ring-set.jpg",
+    size: "small",
+    position: "object-[50%_40%]",
+  },
+  {
+    name: "Cases",
+    href: "/products?category=Cases",
+    image: "/images/product-headline-case-silver.jpg",
+    size: "small",
+    position: "object-[50%_30%]",
+  },
+  {
+    name: "Chains & Pendants",
+    href: "/products",
+    image: "/images/category-chains-pendants.jpg",
+    size: "wide",
+    position: "",
+  },
 ] as const;
 
 export const hotspots = [
-  { label: "Star Ring Set", short: "Star Ring Set", left: "37%", top: "57%", kind: "left" },
-  { label: "Silver Chain Necklace", short: "Chain Necklace", left: "50%", top: "52.6%", kind: "mid" },
-  { label: "Headline Case", short: "Headline Case", left: "85.8%", top: "40.7%", kind: "end" },
+  {
+    label: "Star Ring Set",
+    short: "Star Ring Set",
+    left: "37%",
+    top: "57%",
+    kind: "left",
+  },
+  {
+    label: "Silver Chain Necklace",
+    short: "Chain Necklace",
+    left: "50%",
+    top: "52.6%",
+    kind: "mid",
+  },
+  {
+    label: "Headline Case",
+    short: "Headline Case",
+    left: "85.8%",
+    top: "40.7%",
+    kind: "end",
+  },
 ] as const;
 
 export const faqs = [
-  { q: "How long does delivery take?", a: "Orders are delivered across Morocco within 1 day. Delivery is free in Hay Hassani, Maarif and Médina. Anywhere else costs 30 DH. We message you on WhatsApp as soon as your parcel ships." },
-  { q: "Can I pay cash on delivery?", a: "Yes. We only accept cash on delivery (COD): you pay in dirhams (DH) when your order arrives. Delivery is free in Hay Hassani, Maarif and Médina, and 30 DH elsewhere." },
+  {
+    q: "How long does delivery take?",
+    a: "Orders are delivered across Morocco within 1 day. Delivery is free in Hay Hassani, Maarif and Médina. Anywhere else costs 30 DH. We message you on WhatsApp as soon as your parcel ships.",
+  },
+  {
+    q: "Can I pay cash on delivery?",
+    a: "Yes. We only accept cash on delivery (COD): you pay in dirhams (DH) when your order arrives. Delivery is free in Hay Hassani, Maarif and Médina, and 30 DH elsewhere.",
+  },
 ];
 
 export const footerColumns = [
-  { title: "Shop", links: [["Belts & Buckles", "/products?category=Belts"], ["Rings", "/products?category=Rings"], ["Cases", "/products?category=Cases"], ["Chains & Pendants", "/products"]] },
-  { title: "Help", links: [["Delivery", "#faq"], ["FAQ", "#faq"], ["Contact", "#contact"], ["About us", "#lookbook"]] },
-  { title: "Social", links: [["Instagram", "#instagram"], ["TikTok", "#tiktok"], ["WhatsApp", "#whatsapp"]] },
+  {
+    title: "Shop",
+    links: [
+      ["Belts & Buckles", "/products?category=Belts"],
+      ["Rings", "/products?category=Rings"],
+      ["Cases", "/products?category=Cases"],
+      ["Chains & Pendants", "/products"],
+    ],
+  },
+  {
+    title: "Help",
+    links: [
+      ["Delivery", "#faq"],
+      ["FAQ", "#faq"],
+      ["Contact", "#contact"],
+      ["About us", "#lookbook"],
+    ],
+  },
+  {
+    title: "Social",
+    links: [
+      ["Instagram", "#instagram"],
+      ["TikTok", "#tiktok"],
+      ["WhatsApp", "#whatsapp"],
+    ],
+  },
 ] as const;
 
 export const formatPrice = (n: number) => `${n} DH`;
