@@ -27,7 +27,7 @@ export function Lookbook() {
 
       <div className="group relative aspect-[2.2/1] overflow-hidden rounded-card border border-border bg-deep">
         <Image
-          src="/images/lookbook.png"
+          src="/images/lookbook.webp"
           alt="Three models on a couch wearing silver chains, bracelets and rings, two of them holding metal cigarette cases"
           fill
           sizes="(max-width: 1280px) 100vw, 1216px"

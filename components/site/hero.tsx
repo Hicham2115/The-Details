@@ -76,7 +76,7 @@ export function Hero() {
         <div className="relative z-2 flex min-h-[clamp(532px,29vw,720px)] items-end justify-center gap-4 px-4 pb-14 tablet:order-1 tablet:min-h-0 tablet:gap-[clamp(6px,1.6vw,14px)] tablet:px-[clamp(12px,3vw,32px)] tablet:pb-5">
           <div className={cn(slot, "h-[clamp(440px,24vw,600px)] flex-[1_1_0]")}>
             <Image
-              src="/images/hero-left.png"
+              src="/images/hero-left.webp"
               alt="Model with long dark hair in a graphic white tank top, snake pendant and silver jewelry, sitting on a couch"
               fill
               priority
@@ -91,7 +91,7 @@ export function Hero() {
             )}
           >
             <Image
-              src="/images/hero-center.png"
+              src="/images/hero-center.webp"
               alt="Model with curly hair and sunglasses in an oversized white tee with a star pendant and chain necklace"
               fill
               priority
@@ -101,7 +101,7 @@ export function Hero() {
           </div>
           <div className={cn(slot, "h-[clamp(440px,24vw,600px)] flex-[1_1_0]")}>
             <Image
-              src="/images/hero-right.png"
+              src="/images/hero-right.webp"
               alt="Model with curly hair in a red and black star-print top with a snake necklace"
               fill
               priority
