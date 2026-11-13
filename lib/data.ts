@@ -75,8 +75,6 @@ const allProducts: Product[] = [
     variant: "Silver / Pack of 4 rings",
     price: 100,
     oldPrice: 130, // TODO confirm the "before" price
-    optionLabel: "Pack",
-    sizes: ["Pack 1", "Pack 2", "Pack 3"],
     images: img("gothic-rings-set", 2),
     alt: "Silver gothic rings with skulls, stars and black stones",
   },
