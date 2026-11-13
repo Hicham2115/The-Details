@@ -227,7 +227,7 @@ function Explorer({ initialCategory, query }: { initialCategory: ProductCategory
         {filtered.length > 0 ? (
           <div className="grid grid-cols-3 gap-6 tablet:grid-cols-2 tablet:gap-4 phone:gap-2.5">
             {filtered.map((p) => (
-              <ProductCard key={p.name} p={p} />
+              <ProductCard key={p.name} p={p} imageHover={false} />
             ))}
           </div>
         ) : (

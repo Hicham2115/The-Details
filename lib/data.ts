@@ -45,7 +45,7 @@ const allProducts: Product[] = [
     price: 110,
     oldPrice: 150, // TODO confirm the "before" price
     tag: "New",
-    images: img("love-hurts-belt", 6),
+    images: img("love-hurts-belt", 4),
     alt: "Burgundy embossed belt with a silver heart and dagger buckle reading Love Hurts",
   },
   {
@@ -55,7 +55,7 @@ const allProducts: Product[] = [
     variant: "Violet / Silver buckle",
     price: 110,
     oldPrice: 150, // TODO confirm the "before" price
-    images: img("snake-buckle-belt-violet", 5),
+    images: img("snake-buckle-belt-violet", 4),
     alt: "Violet snakeskin-print belt with a silver coiled snake buckle",
   },
   {
@@ -65,7 +65,7 @@ const allProducts: Product[] = [
     variant: "Metal / Printed cover",
     price: 100,
     oldPrice: 140, // TODO confirm the "before" price
-    images: img("headline-case-silver", 4),
+    images: img("headline-case-silver", 1),
     alt: "Silver metal cigarette case with a vintage newspaper headline cover",
   },
   {
@@ -77,7 +77,7 @@ const allProducts: Product[] = [
     oldPrice: 130, // TODO confirm the "before" price
     optionLabel: "Pack",
     sizes: ["Pack 1", "Pack 2", "Pack 3"],
-    images: img("gothic-rings-set", 4),
+    images: img("gothic-rings-set", 2),
     alt: "Silver gothic rings with skulls, stars and black stones",
   },
   {
@@ -87,7 +87,7 @@ const allProducts: Product[] = [
     variant: "Brown / Antique brass buckle",
     price: 110,
     oldPrice: 150, // TODO confirm the "before" price
-    images: img("bull-head-western-belt", 5),
+    images: img("bull-head-western-belt", 4),
     alt: "Brown embossed leather belt with an antique brass bull head buckle",
   },
   {
@@ -97,7 +97,7 @@ const allProducts: Product[] = [
     variant: "Red / Antique silver buckle",
     price: 110,
     oldPrice: 150, // TODO confirm the "before" price
-    images: img("grim-reaper-belt", 4),
+    images: img("grim-reaper-belt", 3),
     alt: "Red embossed belt with an antique silver Grim Reaper skull buckle",
   },
   {
@@ -107,7 +107,7 @@ const allProducts: Product[] = [
     variant: "Pink / Silver double buckle",
     price: 110,
     oldPrice: 150, // TODO confirm the "before" price
-    images: img("leopard-plush-belt", 2),
+    images: img("leopard-plush-belt", 3),
     alt: "Pink leopard-print plush double row belt with a silver buckle",
   },
   {
@@ -117,7 +117,7 @@ const allProducts: Product[] = [
     variant: "Metal / Printed cover",
     price: 100,
     oldPrice: 140, // TODO confirm the "before" price
-    images: img("pop-art-girl-case", 4),
+    images: img("pop-art-girl-case", 1),
     alt: "Silver metal cigarette case printed with a pop art illustration of a girl with red lips",
   },
   {
@@ -127,7 +127,7 @@ const allProducts: Product[] = [
     variant: "Metal / Printed cover",
     price: 100,
     oldPrice: 140, // TODO confirm the "before" price
-    images: img("starry-night-case", 4),
+    images: img("starry-night-case", 1),
     alt: "Silver metal cigarette case printed with a swirling starry night painting",
   },
 ];

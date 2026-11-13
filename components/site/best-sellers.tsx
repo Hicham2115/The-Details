@@ -17,7 +17,7 @@ const tagStyle: Record<NonNullable<Product["tag"]>, string> = {
   "Pre-order": "bg-tag-preorder text-foreground",
 };
 
-export function ProductCard({ p }: { p: Product }) {
+export function ProductCard({ p, imageHover = true }: { p: Product; imageHover?: boolean }) {
   const router = useRouter();
   const add = useCart((s) => s.add);
   const openCart = useCart((s) => s.open);
@@ -45,11 +45,12 @@ export function ProductCard({ p }: { p: Product }) {
           fill
           sizes="(max-width: 900px) 50vw, 300px"
           className={cn(
-            "object-cover transition-[scale,opacity] duration-700 ease-out will-change-transform group-hover:scale-105",
-            p.images[1] && "group-hover:opacity-0",
+            "object-cover transition-[scale,opacity] duration-700 ease-out will-change-transform",
+            imageHover && "group-hover:scale-105",
+            imageHover && p.images[1] && "group-hover:opacity-0",
           )}
         />
-        {p.images[1] && (
+        {imageHover && p.images[1] && (
           <Image
             src={p.images[1]}
             alt=""
@@ -60,7 +61,10 @@ export function ProductCard({ p }: { p: Product }) {
         )}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-linear-to-t from-background/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100"
+          className={cn(
+            "pointer-events-none absolute inset-0 bg-linear-to-t from-background/60 via-transparent to-transparent opacity-0 transition-opacity",
+            imageHover && "group-hover:opacity-100",
+          )}
         />
         {p.tag && (
           <span

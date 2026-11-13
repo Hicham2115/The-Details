@@ -62,7 +62,7 @@ export function ProductDetail({ p }: { p: Product }) {
                 aria-current={i === index}
                 onClick={() => setIndex(i)}
                 className={cn(
-                  "relative block aspect-[4/5] w-[84px] cursor-pointer overflow-hidden rounded-tag border bg-deep transition-all tablet:w-16",
+                  "relative block aspect-square w-[84px] cursor-pointer overflow-hidden rounded-tag border bg-deep transition-all tablet:w-16",
                   i === index ? "border-accent" : "border-border opacity-60 hover:border-foreground hover:opacity-100",
                 )}
               >
@@ -72,7 +72,7 @@ export function ProductDetail({ p }: { p: Product }) {
           ))}
         </ul>
 
-        <div className="group relative aspect-[4/5] overflow-hidden rounded-card border border-border bg-deep tablet:order-1">
+        <div className="group relative aspect-square overflow-hidden rounded-card border border-border bg-deep tablet:order-1">
           {p.images.map((src, i) => (
             <Image
               key={src}
@@ -82,7 +82,7 @@ export function ProductDetail({ p }: { p: Product }) {
               priority={i === 0}
               sizes="(max-width: 900px) 100vw, 600px"
               className={cn(
-                "object-cover transition-[opacity,scale] duration-700 ease-out group-hover:scale-105",
+                "object-cover transition-[opacity,scale] duration-700 ease-out",
                 i === index ? "opacity-100" : "opacity-0",
               )}
             />
