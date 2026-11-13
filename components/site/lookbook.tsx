@@ -2,14 +2,7 @@ import Image from "next/image";
 import { ArrowUpRight, Plus } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { hotspots } from "@/lib/data";
-import { cn } from "@/lib/utils";
 import { SectionHead, SectionTitle } from "./section-head";
-
-const layout = {
-  left: "flex-row-reverse -translate-x-[calc(100%-22px)]",
-  mid: "-translate-x-[22px] tablet:flex-col tablet:items-start tablet:gap-0.5",
-  end: "flex-row-reverse -translate-x-[calc(100%-22px)] tablet:flex-col-reverse tablet:items-end tablet:gap-0.5",
-} as const;
 
 export function Lookbook() {
   return (
@@ -39,7 +32,7 @@ export function Lookbook() {
             href="#best-sellers"
             aria-label={h.label}
             style={{ left: h.left, top: h.top }}
-            className={cn("group absolute flex -translate-y-[22px] items-center gap-1", layout[h.kind])}
+            className="group absolute flex -translate-x-1/2 -translate-y-[22px] flex-col items-center gap-1"
           >
             <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-pill bg-foreground/35">
               <span className="inline-flex size-[26px] items-center justify-center rounded-pill bg-surface text-foreground">

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Sparkle } from "./sparkle";
 
 const slot =
-  "relative min-w-0 overflow-hidden rounded-card border border-border bg-deep tablet:h-[min(54vw,380px)] tablet:max-w-none tablet:rounded-tag";
+  "relative min-w-0 overflow-hidden rounded-card border border-border bg-deep tablet:h-[min(68vw,480px)] tablet:max-w-none tablet:rounded-tag";
 
 export function Hero() {
   return (
@@ -70,8 +70,8 @@ export function Hero() {
         </div>
 
         {/* Photos */}
-        <div className="relative z-2 flex min-h-[clamp(532px,29vw,720px)] items-end justify-center gap-4 px-4 pb-14 tablet:order-1 tablet:min-h-0 tablet:gap-[clamp(6px,1.6vw,14px)] tablet:px-[clamp(12px,3vw,32px)] tablet:pb-5">
-          <div className={cn(slot, "h-[clamp(440px,24vw,600px)] flex-[1_1_0]")}>
+        <div className="relative z-2 flex min-h-[clamp(632px,35vw,880px)] items-end justify-center gap-4 px-4 pb-14 tablet:order-1 tablet:min-h-0 tablet:gap-[clamp(6px,1.6vw,14px)] tablet:px-[clamp(12px,3vw,32px)] tablet:pb-5">
+          <div className={cn(slot, "h-[clamp(540px,30vw,760px)] flex-[1_1_0]")}>
             <Image
               src="/images/hero-left.webp"
               alt="Model with long dark hair in a graphic white tank top, snake pendant and silver jewelry, sitting on a couch"
@@ -84,7 +84,7 @@ export function Hero() {
           <div
             className={cn(
               slot,
-              "h-[clamp(440px,24vw,600px)] flex-[1.25_1_0] tablet:flex-[1.6_1_0]",
+              "h-[clamp(540px,30vw,760px)] flex-[1.25_1_0] tablet:flex-[1.6_1_0]",
             )}
           >
             <Image
@@ -96,7 +96,7 @@ export function Hero() {
               className="object-cover group-hover:scale-105 object-[33.0741%_50%]"
             />
           </div>
-          <div className={cn(slot, "h-[clamp(440px,24vw,600px)] flex-[1_1_0]")}>
+          <div className={cn(slot, "h-[clamp(540px,30vw,760px)] flex-[1_1_0]")}>
             <Image
               src="/images/hero-right.webp"
               alt="Model with curly hair in a red and black star-print top with a snake necklace"
@@ -121,7 +121,7 @@ export function Hero() {
         </div>
       </div>
 
-      <div
+      {/* <div
         aria-hidden="true"
         className="absolute inset-x-0 bottom-1 z-3 flex items-center justify-center tablet:hidden"
       >
@@ -135,7 +135,7 @@ export function Hero() {
             />
           </span>
         ))}
-      </div>
+      </div> */}
     </section>
   );
 }

@@ -12,7 +12,11 @@ const span = {
 
 export function Categories() {
   return (
-    <section id="collections" aria-labelledby="cat-title" className="mt-20 tablet:mt-16">
+    <section
+      id="collections"
+      aria-labelledby="cat-title"
+      className="mt-20 tablet:mt-16"
+    >
       <SectionHead>
         <SectionTitle id="cat-title">SHOP BY CATEGORY</SectionTitle>
         <p className="m-0 max-w-[320px] text-[15px] leading-[22px] text-muted-foreground phone:text-lg">

@@ -16,7 +16,7 @@ export default function Home() {
           <Hero />
           <BestSellers />
           <Categories />
-          <Lookbook />
+          {/* <Lookbook /> */}
           <Faq />
           <Contact />
         </main>
