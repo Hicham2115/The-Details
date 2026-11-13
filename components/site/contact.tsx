@@ -12,10 +12,22 @@ import { contactSchema, TOPICS } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 import { CustomSelect } from "./custom-select";
 
-type Values = { firstName: string; lastName: string; topic: (typeof TOPICS)[number]; email: string; newsletter: boolean; message: string };
+type Values = {
+  firstName: string;
+  lastName: string;
+  topic: (typeof TOPICS)[number];
+  email: string;
+  message: string;
+};
 type Errors = Partial<Record<keyof Values, string>>;
 
-const initial: Values = { firstName: "", lastName: "", topic: TOPICS[0], email: "", newsletter: false, message: "" };
+const initial: Values = {
+  firstName: "",
+  lastName: "",
+  topic: TOPICS[0],
+  email: "",
+  message: "",
+};
 
 const fieldBase =
   "h-11 w-full rounded-none border-0 border-b border-foreground bg-transparent px-0 py-0 text-[15px] text-foreground shadow-none focus-visible:ring-0 dark:bg-transparent";
@@ -64,7 +76,11 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" aria-labelledby="contact-title" className="mt-20 tablet:mt-16">
+    <section
+      id="contact"
+      aria-labelledby="contact-title"
+      className="mt-20 tablet:mt-16"
+    >
       <h2
         id="contact-title"
         className="m-0 text-center font-display text-[clamp(64px,20vw,300px)] leading-[0.85] font-normal tracking-[-0.01em] whitespace-nowrap phone:text-[19vw]"
@@ -94,23 +110,31 @@ export function Contact() {
 
         <form onSubmit={onSubmit} noValidate className="flex flex-col gap-5">
           <fieldset className="m-0 flex min-w-0 flex-col gap-2 border-0 p-0">
-            <legend className="p-0 text-[13px] leading-[18px] font-semibold">Name (required)</legend>
+            <legend className="p-0 text-[13px] leading-[18px] font-semibold">
+              Name (required)
+            </legend>
             <div className="grid grid-cols-2 gap-6 tablet:grid-cols-1">
               <div className="flex flex-col">
-                <label htmlFor="c-first" className={labelCls}>First name</label>
+                <label htmlFor="c-first" className={labelCls}>
+                  First name
+                </label>
                 <Input
                   id="c-first"
                   autoComplete="given-name"
                   value={values.firstName}
                   onChange={(e) => set("firstName", e.target.value)}
                   aria-invalid={!!errors.firstName}
-                  aria-describedby={errors.firstName ? "c-first-err" : undefined}
+                  aria-describedby={
+                    errors.firstName ? "c-first-err" : undefined
+                  }
                   className={fieldBase}
                 />
                 <FieldError id="c-first-err" message={errors.firstName} />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="c-last" className={labelCls}>Last name</label>
+                <label htmlFor="c-last" className={labelCls}>
+                  Last name
+                </label>
                 <Input
                   id="c-last"
                   autoComplete="family-name"
@@ -126,7 +150,9 @@ export function Contact() {
           </fieldset>
 
           <div className="flex flex-col">
-            <label htmlFor="c-topic" className={labelCls}>Topic</label>
+            <label htmlFor="c-topic" className={labelCls}>
+              Topic
+            </label>
             <CustomSelect
               id="c-topic"
               value={values.topic}
@@ -136,7 +162,12 @@ export function Contact() {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="c-email" className="text-[13px] leading-[18px] font-semibold">Email (required)</label>
+            <label
+              htmlFor="c-email"
+              className="text-[13px] leading-[18px] font-semibold"
+            >
+              Email (required)
+            </label>
             <Input
               id="c-email"
               type="email"
@@ -148,20 +179,12 @@ export function Contact() {
               className={fieldBase}
             />
             <FieldError id="c-email-err" message={errors.email} />
-            <label htmlFor="c-news" className="flex min-h-11 cursor-pointer items-center gap-2.5 text-xs leading-4 text-muted-foreground">
-              <input
-                id="c-news"
-                type="checkbox"
-                checked={values.newsletter}
-                onChange={(e) => set("newsletter", e.target.checked)}
-                className="m-0 size-[18px] cursor-pointer accent-foreground"
-              />
-              <span>Sign up for drops and 30% off your first order</span>
-            </label>
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="c-message" className={labelCls}>Message</label>
+            <label htmlFor="c-message" className={labelCls}>
+              Message
+            </label>
             <Textarea
               id="c-message"
               rows={3}
@@ -169,7 +192,10 @@ export function Contact() {
               onChange={(e) => set("message", e.target.value)}
               aria-invalid={!!errors.message}
               aria-describedby={errors.message ? "c-message-err" : undefined}
-              className={cn(fieldBase, "min-h-[88px] resize-y py-2.5 text-[15px] leading-[22px]")}
+              className={cn(
+                fieldBase,
+                "min-h-[88px] resize-y py-2.5 text-[15px] leading-[22px]",
+              )}
             />
             <FieldError id="c-message-err" message={errors.message} />
           </div>

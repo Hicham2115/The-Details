@@ -6,7 +6,8 @@ import type { ContactInput } from "@/lib/schemas";
 
 export function useContact() {
   return useMutation({
-    mutationFn: async (data: ContactInput) => (await api.post("/contact", data)).data,
+    mutationFn: async (data: ContactInput) =>
+      (await api.post("/contact", data)).data,
     onSuccess: () => toast.success("Message sent. We'll get back to you soon."),
     onError: (error) => toast.error(getErrorMessage(error)),
   });

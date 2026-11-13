@@ -20,7 +20,6 @@ export const contactSchema = z.object({
   lastName: z.string().trim().max(60, "Max 60 characters"),
   topic: z.enum(TOPICS),
   email: emailSchema,
-  newsletter: z.boolean(),
   message: z.string().trim().max(1000, "Max 1000 characters"),
 });
 export type ContactInput = z.infer<typeof contactSchema>;
