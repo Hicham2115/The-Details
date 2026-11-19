@@ -3,14 +3,15 @@
 import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SlidersHorizontal, X } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useProducts } from "@/hooks/use-products";
 import {
   formatPrice,
-  products,
   type Product,
   type ProductCategory,
 } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { ProductCard } from "./best-sellers";
+import { ProductCard, ProductCardSkeleton } from "./best-sellers";
 import { CustomSelect } from "./custom-select";
 
 type Tag = NonNullable<Product["tag"]>;
@@ -36,8 +37,6 @@ const sortOptions = [
   { value: "price-desc", label: "Price: high to low" },
 ] as const satisfies readonly { value: Sort; label: string }[];
 
-const maxPrice = Math.max(...products.map((p) => p.price));
-const minPrice = Math.min(...products.map((p) => p.price));
 
 const chip =
   "inline-flex min-h-11 cursor-pointer items-center justify-center rounded-pill border px-1 text-[11px] font-semibold tracking-[0.04em] uppercase transition-colors";
@@ -66,7 +65,39 @@ function ExplorerFromUrl() {
   const params = useSearchParams();
   const initial = categories.find((c) => c === params.get("category")) ?? "All";
   const query = (params.get("q") ?? "").trim().slice(0, 60);
-  return <Explorer key={initial} initialCategory={initial} query={query} />;
+  const { data: products, isError } = useProducts();
+
+  if (isError)
+    return (
+      <p className="m-0 rounded-card border border-dashed border-border px-6 py-20 text-center text-sm text-muted-foreground">
+        Could not load products. Please refresh the page.
+      </p>
+    );
+  if (!products) return <ExplorerSkeleton />;
+  return <Explorer key={initial} products={products} initialCategory={initial} query={query} />;
+}
+
+function ExplorerSkeleton() {
+  return (
+    <div
+      className="grid grid-cols-[300px_minmax(0,1fr)] items-start gap-10 tablet:grid-cols-1 tablet:gap-6"
+      aria-busy="true"
+      aria-label="Loading products"
+    >
+      <Skeleton className="h-[360px] w-full rounded-card tablet:h-11 tablet:rounded-pill" />
+      <div>
+        <div className="mb-6 flex items-center justify-between gap-3">
+          <Skeleton className="h-5 w-24" />
+          <Skeleton className="h-11 w-[200px] rounded-pill" />
+        </div>
+        <div className="grid grid-cols-3 gap-6 tablet:grid-cols-2 tablet:gap-4 phone:gap-2.5">
+          {Array.from({ length: 6 }, (_, i) => (
+            <ProductCardSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function ProductsExplorer() {
@@ -77,8 +108,18 @@ export function ProductsExplorer() {
   );
 }
 
-function Explorer({ initialCategory, query }: { initialCategory: ProductCategory | "All"; query: string }) {
+function Explorer({
+  products,
+  initialCategory,
+  query,
+}: {
+  products: Product[];
+  initialCategory: ProductCategory | "All";
+  query: string;
+}) {
   const router = useRouter();
+  const maxPrice = Math.max(...products.map((p) => p.price));
+  const minPrice = Math.min(...products.map((p) => p.price));
   const [category, setCategory] = useState<ProductCategory | "All">(initialCategory);
   const [tag, setTag] = useState<Tag | "All">("All");
   const [limit, setLimit] = useState(maxPrice);
@@ -99,7 +140,7 @@ function Explorer({ initialCategory, query }: { initialCategory: ProductCategory
     if (sort === "price-desc")
       return [...list].sort((a, b) => b.price - a.price);
     return list;
-  }, [query, category, tag, limit, sort]);
+  }, [products, query, category, tag, limit, sort]);
 
   const isFiltered = category !== "All" || tag !== "All" || limit !== maxPrice || query !== "";
   const reset = () => {

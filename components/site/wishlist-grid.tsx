@@ -3,13 +3,24 @@
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { products } from "@/lib/data";
+import { useProducts } from "@/hooks/use-products";
 import { useFavorites } from "@/stores/favorites-store";
-import { ProductCard } from "./best-sellers";
+import { ProductCard, ProductCardSkeleton } from "./best-sellers";
 
 export function WishlistGrid() {
   const slugs = useFavorites((s) => s.slugs);
+  const { data: products = [], isPending } = useProducts();
   const saved = products.filter((p) => slugs.includes(p.slug));
+
+  if (isPending && slugs.length > 0) {
+    return (
+      <div className="grid grid-cols-4 gap-6 tablet:grid-cols-2 tablet:gap-4 phone:gap-2.5">
+        {slugs.map((s) => (
+          <ProductCardSkeleton key={s} />
+        ))}
+      </div>
+    );
+  }
 
   if (saved.length === 0) {
     return (

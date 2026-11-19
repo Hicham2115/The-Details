@@ -7,17 +7,17 @@ import { Footer } from "@/components/site/footer";
 import { Navbar } from "@/components/site/navbar";
 import { ProductDetail } from "@/components/site/product-detail";
 import { SectionHead, SectionTitle } from "@/components/site/section-head";
-import { getProduct, products } from "@/lib/data";
+import { getProduct, getProducts } from "@/lib/shopify";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  return (await getProducts()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const p = getProduct(slug);
+  const p = await getProduct(slug);
   if (!p) return {};
   return {
     title: `${p.name} | The Details`,
@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const p = getProduct(slug);
+  const products = await getProducts();
+  const p = products.find((x) => x.slug === slug);
   if (!p) notFound();
 
   const related = [

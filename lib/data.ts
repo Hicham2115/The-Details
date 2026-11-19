@@ -22,119 +22,11 @@ export type Product = {
   /** Label for the option picker. Defaults to "Size". */
   optionLabel?: string;
   /** First image is the main one; the second shows on hover. */
+  /** Shopify variant used when ordering. */
+  variantId: string;
   images: string[];
   alt: string;
 };
-
-// "-0" is the hand-picked main photo (first image.png). Pass hasMain=false if a product has none.
-const img = (slug: string, count: number, hasMain = true) =>
-  Array.from(
-    { length: count + (hasMain ? 1 : 0) },
-    (_, i) => `/images/products/${slug}-${i + (hasMain ? 0 : 1)}.webp`,
-  );
-
-// NOTE: prices marked "TODO price" are provisional. Confirm them before launch.
-const categoryOrder: ProductCategory[] = ["Belts", "Cases", "Rings"];
-
-const allProducts: Product[] = [
-  {
-    name: "Love Hurts Belt",
-    slug: "love-hurts-belt",
-    category: "Belts",
-    variant: "Burgundy / Silver buckle",
-    price: 110,
-    oldPrice: 150, // TODO confirm the "before" price
-    tag: "New",
-    images: img("love-hurts-belt", 4),
-    alt: "Burgundy embossed belt with a silver heart and dagger buckle reading Love Hurts",
-  },
-  {
-    name: "Snake Buckle Belt — Violet",
-    slug: "snake-buckle-belt-violet",
-    category: "Belts",
-    variant: "Violet / Silver buckle",
-    price: 110,
-    oldPrice: 150, // TODO confirm the "before" price
-    images: img("snake-buckle-belt-violet", 4),
-    alt: "Violet snakeskin-print belt with a silver coiled snake buckle",
-  },
-  {
-    name: "Headline Case — Silver",
-    slug: "headline-case-silver",
-    category: "Cases",
-    variant: "Metal / Printed cover",
-    price: 100,
-    oldPrice: 140, // TODO confirm the "before" price
-    images: img("headline-case-silver", 1),
-    alt: "Silver metal cigarette case with a vintage newspaper headline cover",
-  },
-  {
-    name: "Gothic Rings Set",
-    slug: "gothic-rings-set",
-    category: "Rings",
-    variant: "Silver / Pack of 4 rings",
-    price: 100,
-    oldPrice: 130, // TODO confirm the "before" price
-    images: img("gothic-rings-set", 2),
-    alt: "Silver gothic rings with skulls, stars and black stones",
-  },
-  {
-    name: "Bull Head Western Belt",
-    slug: "bull-head-western-belt",
-    category: "Belts",
-    variant: "Brown / Antique brass buckle",
-    price: 110,
-    oldPrice: 150, // TODO confirm the "before" price
-    images: img("bull-head-western-belt", 4),
-    alt: "Brown embossed leather belt with an antique brass bull head buckle",
-  },
-  {
-    name: "Grim Reaper Belt",
-    slug: "grim-reaper-belt",
-    category: "Belts",
-    variant: "Red / Antique silver buckle",
-    price: 110,
-    oldPrice: 150, // TODO confirm the "before" price
-    images: img("grim-reaper-belt", 3),
-    alt: "Red embossed belt with an antique silver Grim Reaper skull buckle",
-  },
-  {
-    name: "Leopard Plush Belt",
-    slug: "leopard-plush-belt",
-    category: "Belts",
-    variant: "Pink / Silver double buckle",
-    price: 110,
-    oldPrice: 150, // TODO confirm the "before" price
-    images: img("leopard-plush-belt", 3),
-    alt: "Pink leopard-print plush double row belt with a silver buckle",
-  },
-  {
-    name: "Pop Art Girl Case",
-    slug: "pop-art-girl-case",
-    category: "Cases",
-    variant: "Metal / Printed cover",
-    price: 100,
-    oldPrice: 140, // TODO confirm the "before" price
-    images: img("pop-art-girl-case", 1),
-    alt: "Silver metal cigarette case printed with a pop art illustration of a girl with red lips",
-  },
-  {
-    name: "Starry Night Case",
-    slug: "starry-night-case",
-    category: "Cases",
-    variant: "Metal / Printed cover",
-    price: 100,
-    oldPrice: 140, // TODO confirm the "before" price
-    images: img("starry-night-case", 1),
-    alt: "Silver metal cigarette case printed with a swirling starry night painting",
-  },
-];
-
-// Belts first, then cases, then rings (stable: keeps the order above inside each group).
-export const products: Product[] = [...allProducts].sort(
-  (a, b) =>
-    categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category),
-);
 
 /** Choices the customer must make before ordering (belt size, ring pack). null = nothing to pick. */
 export const productOptions = (p: Product): string[] | null =>
@@ -142,9 +34,6 @@ export const productOptions = (p: Product): string[] | null =>
 
 /** Flat delivery fee (DH) anywhere in Casablanca. */
 export const DELIVERY_FEE = 30;
-
-export const getProduct = (slug: string) =>
-  products.find((p) => p.slug === slug);
 
 export const categories = [
   {

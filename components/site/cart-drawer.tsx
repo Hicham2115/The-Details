@@ -26,10 +26,10 @@ import { useOrder } from "@/hooks/use-order";
 import {
   DELIVERY_FEE,
   formatPrice,
-  getProduct,
 } from "@/lib/data";
 import { orderSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
+import { useProducts } from "@/hooks/use-products";
 import { cartCount, cartSubtotal, lineKey, useCart } from "@/stores/cart-store";
 
 type Step = "cart" | "checkout" | "done";
@@ -45,6 +45,7 @@ const primaryBtn =
 export function CartDrawer() {
   const { lines, isOpen, setOpen, setQty, remove, clear } = useCart();
   const order = useOrder();
+  const { data: products = [] } = useProducts();
   const [step, setStep] = useState<Step>("cart");
   const [values, setValues] = useState({
     fullName: "",
@@ -56,7 +57,7 @@ export function CartDrawer() {
   >({});
   const [doneTotal, setDoneTotal] = useState(0);
 
-  const subtotal = cartSubtotal(lines);
+  const subtotal = cartSubtotal(lines, products);
   const delivery = DELIVERY_FEE;
   const total = subtotal + delivery;
 
@@ -173,7 +174,7 @@ export function CartDrawer() {
           <>
             <ul className="m-0 flex flex-1 list-none flex-col gap-4 overflow-y-auto p-5">
               {lines.map((l) => {
-                const p = getProduct(l.slug);
+                const p = products.find((x) => x.slug === l.slug);
                 if (!p) return null;
                 const key = lineKey(l);
                 return (

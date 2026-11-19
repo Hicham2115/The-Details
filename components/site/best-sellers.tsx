@@ -5,7 +5,9 @@ import { ArrowUpRight, Heart, Plus } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { discountPercent, formatPrice, productOptions, products, type Product } from "@/lib/data";
+import { useProducts } from "@/hooks/use-products";
+import { Skeleton } from "@/components/ui/skeleton";
+import { discountPercent, formatPrice, productOptions, type Product } from "@/lib/data";
 import { useCart } from "@/stores/cart-store";
 import { useFavorites } from "@/stores/favorites-store";
 import { cn } from "@/lib/utils";
@@ -133,6 +135,7 @@ export function ProductCard({ p, imageHover = true }: { p: Product; imageHover?:
 }
 
 export function BestSellers() {
+  const { data: products = [], isPending } = useProducts();
   return (
     <section
       id="best-sellers"
@@ -155,10 +158,21 @@ export function BestSellers() {
         </div>
       </SectionHead>
       <div className="grid grid-cols-4 gap-6 tablet:grid-cols-2 tablet:gap-4 phone:gap-2.5">
-        {products.slice(0, 4).map((p) => (
-          <ProductCard key={p.name} p={p} />
-        ))}
+        {isPending
+          ? Array.from({ length: 4 }, (_, i) => <ProductCardSkeleton key={i} />)
+          : products.slice(0, 4).map((p) => <ProductCard key={p.slug} p={p} />)}
       </div>
     </section>
+  );
+}
+
+export function ProductCardSkeleton() {
+  return (
+    <div className="flex flex-col gap-3 rounded-card border border-border bg-surface p-3 phone:gap-2 phone:p-2">
+      <Skeleton className="aspect-[4/5] w-full rounded-tag" />
+      <Skeleton className="h-5 w-3/4" />
+      <Skeleton className="h-4 w-1/2" />
+      <Skeleton className="h-5 w-1/3" />
+    </div>
   );
 }
